@@ -4,7 +4,7 @@
  * Purpose: Defines the Class GuiImplementation
  ***********************************************************************/
 
-package appFramework;
+package gui;
 
 import gui.MainFrame;
 import java.util.*;
@@ -17,6 +17,7 @@ public class GuiImplementation implements GuiComponent {
    public MainFrame mainFrame;
    
    /** @pdOid e832d696-1900-4fb0-a3b4-d47a32de85d2 */
-   public void createGui();
+   public void createGui() {
+}
 
 }

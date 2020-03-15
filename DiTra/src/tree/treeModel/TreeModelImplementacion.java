@@ -1,4 +1,4 @@
-package tree.Model;
+package tree.treeModel;
 
 public class TreeModelImplementacion {
 

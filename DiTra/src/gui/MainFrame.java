@@ -6,8 +6,9 @@
 
 package gui;
 
-import tree.Model.TreeModelImplementacion;
 import controller.ActionManager;
+import tree.treeModel.TreeModelImplementacion;
+
 import java.util.*;
 
 import javax.swing.JFrame;
