@@ -8,19 +8,34 @@ package appFramework;
 
 import java.util.*;
 
-/** @pdOid 10da4269-688b-4ce2-916a-4d3109974289 */
+import gui.GuiImplementation;
+import tree.treeModel.TreeModelImplementacion;
+
 public abstract class AppFramework {
-   /** @pdRoleInfo migr=no name=GuiComponent assc=association1 coll=java.util.Collection impl=java.util.HashSet mult=0..* type=Aggregation */
-   public java.util.Collection<GuiComponent> guiComponent;
-   /** @pdRoleInfo migr=no name=TreeModel assc=association2 coll=java.util.Collection impl=java.util.HashSet mult=0..* type=Aggregation */
-   public java.util.Collection<TreeModel> treeModel;
-   /** @pdRoleInfo migr=no name=ConfigComponent assc=association3 coll=java.util.Collection impl=java.util.HashSet mult=0..* type=Aggregation */
-   public java.util.Collection<ConfigComponent> configComponent;
-   /** @pdRoleInfo migr=no name=Repository assc=association6 coll=java.util.Collection impl=java.util.HashSet mult=0..* type=Aggregation */
-   public java.util.Collection<Repository> repository;
    
+	public java.util.Collection<GuiComponent> guiComponent;
+   	public java.util.Collection<TreeModel> treeModel;
+   	public java.util.Collection<ConfigComponent> configComponent;
+   	public java.util.Collection<Repository> repository;
    
-   /** @pdGenerated default getter */
+   	private GuiComponent gui;
+   	private TreeModel tree;
+   
+   	public void create() {
+	   gui = new GuiImplementation();
+	   tree = new TreeModelImplementacion();
+   	}
+   	
+	public GuiImplementation getGui() {
+		return (GuiImplementation) gui;
+	}
+	
+	public TreeModelImplementacion getTree() {
+		return (TreeModelImplementacion) tree;
+	}
+
+//-----------------------------IZ PD15--------------------------------------------
+/** @pdGenerated default getter */
    public java.util.Collection<GuiComponent> getGuiComponent() {
       if (guiComponent == null)
          guiComponent = new java.util.HashSet<GuiComponent>();

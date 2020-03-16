@@ -8,28 +8,71 @@ package gui;
 
 import controller.ActionManager;
 import tree.treeModel.TreeModelImplementacion;
+import gui.MyMenu;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.util.*;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
-/** @pdOid 4853b9ef-ba33-4f2b-adc8-c43ba7cb6ce2 */
 public class MainFrame extends JFrame {
-   /** @pdRoleInfo migr=no name=MainFrame assc=association2 mult=0..1 type=Aggregation */
-   public MainFrame mainFrameB;
-   /** @pdRoleInfo migr=no name=TreeModelImplementacion assc=association3 mult=1..1 type=Composition */
-   public TreeModelImplementacion model;
-   /** @pdRoleInfo migr=no name=ActionManager assc=association4 mult=1..1 */
-   public ActionManager actionManager;
-   /** @pdRoleInfo migr=no name=MyMenu assc=association5 mult=1..1 type=Composition */
-   public MyMenu myMenu;
-   /** @pdRoleInfo migr=no name=TabelPanel assc=association6 mult=1..1 type=Composition */
-   public TabelPanel tabelPanel;
+	private static MainFrame instance = null;
+	public MainFrame mainFrameB;
+	public TreeModelImplementacion model;
+	public ActionManager actionManager;
+	public MyMenu myMenu;
+	public TabelPanel tabelPanel;
    
-   /** @param model
-    * @pdOid 99d4821c-0ecd-427c-98b2-276b2189035d */
-   public void initializeModel(TreeModelImplementacion model) {
-      // TODO: implement
-   }
+	private JPanel jPanel;
+	private MyMenu menu;
+	private JTabbedPane desktop;
+	
+	public void initializeModel(TreeModelImplementacion model) {
+		this.model = model;
+		initialiseGUI();
+	}
 
+	private MainFrame()
+	{
+		setActionManager(new ActionManager());
+		System.out.println("Ucitan view");
+	}
+   
+	public static MainFrame getInstance() {
+		if(instance == null)
+			instance = new MainFrame();
+		return instance;
+	}
+
+	public void setActionManager(ActionManager actionManager) {
+		this.actionManager = actionManager;
+	}
+
+	public void initialiseGUI() {
+	   Toolkit kit = Toolkit.getDefaultToolkit();
+       Dimension screenSize = kit.getScreenSize();
+       int screenHeight = screenSize.height;
+       int screenWidth = screenSize.width;
+      
+      
+       jPanel = new JPanel();
+       jPanel.setLayout(new BorderLayout());
+      
+       menu = new MyMenu();
+       setJMenuBar(menu);
+
+       desktop = new JTabbedPane();
+       
+       setSize((screenWidth/2)+400, (screenHeight /2)+300);
+       setTitle("DiTra-Teski klijent");
+    
+       setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+       setLocationRelativeTo(null);
+       setVisible(true);
+   }
+   
 }

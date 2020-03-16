@@ -8,8 +8,22 @@ package gui;
 
 import java.util.*;
 
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 
-/** @pdOid 3af56903-37af-42b3-80c1-4f6d8d25b0e3 */
+import gui.MainFrame;
+
 public class MyMenu extends JMenuBar {
+	public MyMenu() {
+		
+		JMenu menuFile = new JMenu("File");
+		//menuFile.add(MainFrame.getInstance().getActionManager().getEditMetaSema());
+			
+		JMenu menuHelp = new JMenu("Help");
+		//menuHelp.add(MainView.getInstance().getActionManager().getAbout());
+			
+			
+		add(menuFile);
+		add(menuHelp);
+	}
 }
