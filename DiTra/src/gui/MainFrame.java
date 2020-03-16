@@ -17,6 +17,8 @@ import java.util.*;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 
 public class MainFrame extends JFrame {
@@ -66,6 +68,18 @@ public class MainFrame extends JFrame {
        setJMenuBar(menu);
 
        desktop = new JTabbedPane();
+       
+       JScrollPane scroll=new JScrollPane(model.getWorkspaceTree());
+       
+       
+		scroll.setMinimumSize(new Dimension(200,150));
+		JSplitPane split=new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,scroll,desktop);
+		add(split,BorderLayout.CENTER);
+		split.setDividerLocation(250);
+		
+		
+		
+		add(jPanel,BorderLayout.NORTH);
        
        setSize((screenWidth/2)+400, (screenHeight /2)+300);
        setTitle("DiTra-Teski klijent");

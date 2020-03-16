@@ -12,21 +12,30 @@ import java.util.*;
 
 import appFramework.TreeModel;
 
-/** @pdOid 559b68a2-593a-4ffa-9ff9-293c2fd9d0f8 */
 public class TreeModelImplementacion implements TreeModel {
    
    public WorkspaceModel workspaceModel;
    public WorkspaceTree workspaceTree;
    
    public TreeModelImplementacion() {
-	   loadMetaSema();
 	   createTreeModel();
 	   createTreeView();
+	   loadMetaSema();//test
    }
    
    
    public void loadMetaSema() {
-	   
+	   Node ir = workspaceModel.getNodeFactory().makeNode("informacioni resurs");
+	   Node et = workspaceModel.getNodeFactory().makeNode("entitet");
+	   Node at = workspaceModel.getNodeFactory().makeNode("atribut");
+	   workspaceModel.addInfRe(ir);
+	   ((InformacioniResurs)ir).addEntitet((Entitet) et);
+	   ((InformacioniResurs)ir).getTreeView().add(((Entitet)et).getTreeView());
+	   ((Entitet)et).addAtribut((Atribut)at);
+	   ((Entitet)et).getTreeView().add(((Atribut)at).getTreeView());
+	   ir.setName("ir");
+	   et.setName("et");
+	   at.setName("at");
    }
    
    public void createTreeModel() {
@@ -41,6 +50,12 @@ public class TreeModelImplementacion implements TreeModel {
 	   workspaceTree = new WorkspaceTree();
 	   workspaceTree.setModel(workspaceModel);
    }
+
+
+	public WorkspaceTree getWorkspaceTree() {
+		return workspaceTree;
+	}
+   
    
 
 }

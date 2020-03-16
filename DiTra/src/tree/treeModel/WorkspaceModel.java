@@ -29,15 +29,19 @@ public class WorkspaceModel extends DefaultTreeModel {
 	}
 
 	
-	public void addInfRe(InformacioniResurs infRe)
+	public void addInfRe(Node infRe)
 	{
-		infResursi.add(infRe);                                           //dodaje u listu modela infResursa
+		infResursi.add((InformacioniResurs)infRe);                                           //dodaje u listu modela infResursa
 		((WorkspaceView)getRoot()).add(infRe.getTreeView());   //dodaje infresurs u stablo
 	}
 	
 	
 	public ArrayList<InformacioniResurs> getInfResursi() {
 		return infResursi;
+	}
+
+	public NodeFactory getNodeFactory() {
+		return nodeFactory;
 	}
 
 
