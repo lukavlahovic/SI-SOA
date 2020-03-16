@@ -18,19 +18,29 @@ public class TreeModelImplementacion implements TreeModel {
    public WorkspaceModel workspaceModel;
    public WorkspaceTree workspaceTree;
    
+   public TreeModelImplementacion() {
+	   loadMetaSema();
+	   createTreeModel();
+	   createTreeView();
+   }
+   
    
    public void loadMetaSema() {
 	   
    }
    
    public void createTreeModel() {
-	   /*workspaceTree = new WorkspaceTree();
+	   
 	   workspaceModel = new WorkspaceModel();
-	   workspaceTree.setModel(workspaceModel);*/
-   }
-   
-   public void createTreeView() {
 	   
    }
+
+   @Override
+   public void createTreeView() {
+	
+	   workspaceTree = new WorkspaceTree();
+	   workspaceTree.setModel(workspaceModel);
+   }
+   
 
 }

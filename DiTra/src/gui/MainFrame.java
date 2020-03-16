@@ -21,7 +21,7 @@ import javax.swing.JTabbedPane;
 
 public class MainFrame extends JFrame {
 	private static MainFrame instance = null;
-	public MainFrame mainFrameB;
+	public MainFrame mainFrame;
 	public TreeModelImplementacion model;
 	public ActionManager actionManager;
 	public MyMenu myMenu;
@@ -74,5 +74,39 @@ public class MainFrame extends JFrame {
        setLocationRelativeTo(null);
        setVisible(true);
    }
+
+	public MainFrame getMainFrame() {
+		return mainFrame;
+	}
+
+	public TreeModelImplementacion getModel() {
+		return model;
+	}
+
+	public ActionManager getActionManager() {
+		return actionManager;
+	}
+
+	public MyMenu getMyMenu() {
+		return myMenu;
+	}
+
+	public TabelPanel getTabelPanel() {
+		return tabelPanel;
+	}
+
+	public JPanel getjPanel() {
+		return jPanel;
+	}
+
+	public MyMenu getMenu() {
+		return menu;
+	}
+
+	public JTabbedPane getDesktop() {
+		return desktop;
+	}
+	
+	
    
 }
