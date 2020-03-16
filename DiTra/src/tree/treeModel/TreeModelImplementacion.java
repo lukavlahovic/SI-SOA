@@ -12,7 +12,7 @@ import java.util.*;
 
 import appFramework.TreeModel;
 
-public class TreeModelImplementacion implements TreeModel {
+public class TreeModelImplementacion extends java.util.Observable implements TreeModel {
    
    public WorkspaceModel workspaceModel;
    public WorkspaceTree workspaceTree;
@@ -29,10 +29,14 @@ public class TreeModelImplementacion implements TreeModel {
 	   Node et = workspaceModel.getNodeFactory().makeNode("entitet");
 	   Node at = workspaceModel.getNodeFactory().makeNode("atribut");
 	   workspaceModel.addInfRe(ir);
-	   ((InformacioniResurs)ir).addEntitet((Entitet) et);
-	   ((InformacioniResurs)ir).getTreeView().add(((Entitet)et).getTreeView());
-	   ((Entitet)et).addAtribut((Atribut)at);
-	   ((Entitet)et).getTreeView().add(((Atribut)at).getTreeView());
+	   ((InformacioniResurs)ir).addEntitet(et);
+	   this.addObserver((Observer) ir);
+	   this.addObserver((Observer) et);
+	   setChanged();
+	   notifyObservers((Entitet)et);
+	   ((Entitet)et).addAtribut(at);
+	   setChanged();
+	   notifyObservers((Atribut)at);
 	   ir.setName("ir");
 	   et.setName("et");
 	   at.setName("at");

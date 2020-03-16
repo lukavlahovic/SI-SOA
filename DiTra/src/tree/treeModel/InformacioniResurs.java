@@ -10,7 +10,7 @@ import tree.treeView.InformacioniResursView;
 import java.util.*;
 
 
-public class InformacioniResurs extends Node {
+public class InformacioniResurs extends Node implements java.util.Observer {
 
    
   
@@ -46,23 +46,23 @@ public class InformacioniResurs extends Node {
    
    /** @pdGenerated default add
      * @param newEntitet */
-   public void addEntitet(Entitet newEntitet) {
+   public void addEntitet(Node newEntitet) {
       if (newEntitet == null)
          return;
       if (this.entiteti == null)
          this.entiteti = new java.util.HashSet<Entitet>();
-      if (!this.entiteti.contains(newEntitet))
-         this.entiteti.add(newEntitet);
+      if (!this.entiteti.contains((Entitet)newEntitet))
+         this.entiteti.add((Entitet)newEntitet);
    }
    
    /** @pdGenerated default remove
      * @param oldEntitet */
-   public void removeEntitet(Entitet oldEntitet) {
+   public void removeEntitet(Node oldEntitet) {
       if (oldEntitet == null)
          return;
       if (this.entiteti != null)
-         if (this.entiteti.contains(oldEntitet))
-            this.entiteti.remove(oldEntitet);
+         if (this.entiteti.contains((Entitet)oldEntitet))
+            this.entiteti.remove((Entitet)oldEntitet);
    }
    
    /** @pdGenerated default removeAll */
@@ -70,5 +70,18 @@ public class InformacioniResurs extends Node {
       if (entiteti != null)
          entiteti.clear();
    }
+
+
+@Override
+  public void update(Observable o, Object arg) {
+	 
+	try {
+		if(this.entiteti.contains((Entitet)arg))
+			this.getTreeView().add(((Entitet)arg).getTreeView());
+	} catch (Exception e) {
+		// TODO: handle exception
+	}
+		
+  }
 
 }

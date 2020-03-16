@@ -47,6 +47,8 @@ public class EntitetView extends DefaultMutableTreeNode {
 	public String toString() {
 		return entitet.getName();
 	}
+
+
 	
 
 	
