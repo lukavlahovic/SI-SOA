@@ -51,7 +51,7 @@ public class TablePanel extends JPanel implements  UpdateBlockListener {
 	private JTable tabelaRelacija;
 	//private ResultSet uiFile;
 	//private JPanel panTop;
-	private Toolbar toolbar;
+	//private Toolbar toolbar;
 	
 	
 	public TablePanel(Entitet entitet) {
@@ -62,7 +62,7 @@ public class TablePanel extends JPanel implements  UpdateBlockListener {
 		//uiFile = MainFrame.getInstance().getModel().getConfig().getConnection().getMetaData().getTables(null, null, null, dbType);
 		//this.uiFile.addUpdateBlockListener(this);
 		
-		toolbar = new Toolbar();
+		//toolbar = new Toolbar();
 		
 		
 		glavnaTabela = new JTable();

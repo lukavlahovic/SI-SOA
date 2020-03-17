@@ -1,2 +1,5 @@
 eclipse.preferences.version=1
-encoding//src/controller/FetchNextBlockAction.java=UTF-8
+encoding//src/database/File.java=UTF-8
+encoding//src/database/FileField.java=UTF-8
+encoding//src/database/FileView.java=UTF-8
+encoding//src/tree/treeView/WorkspaceTree.java=UTF-8

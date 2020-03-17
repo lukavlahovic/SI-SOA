@@ -19,14 +19,18 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
+import database.File;
+import database.FileView;
 import gui.MainFrame;
 import gui.TablePanel;
+
 import tree.treeModel.InformacioniResurs;
 import tree.treeModel.WorkspaceModel;
 
 
+
 /** @pdOid 3eba6cf4-b99c-4bd5-bcb7-071b5758aedd */
-public class WorkspaceTree extends JTree implements TreeSelectionListener {
+public class WorkspaceTree extends JTree implements TreeSelectionListener,MouseListener {
 
    public WorkspaceTree() {
 		
@@ -34,7 +38,7 @@ public class WorkspaceTree extends JTree implements TreeSelectionListener {
 		setCellEditor(new WorkspaceTreeEditor(this, new WorkspaceTreeCellRenderer()));
 		setCellRenderer(new WorkspaceTreeCellRenderer());
 		setEditable(true);
-		addMouseListener(ml);
+		addMouseListener(this);
 	}
 	
 	
@@ -46,6 +50,25 @@ public class WorkspaceTree extends JTree implements TreeSelectionListener {
 	}
 	
 	
+	/*
+	 * Prilikom duplog klika na stablo koje predstavlja strukturu otvorene baze podataka,
+	 * proverava se da li je korisnik kliknuo na čvor koji predstavlja tabelu baze podataka,
+	 * ukoliko jeste pravi se nova instanca klase UIDBFile kojoj se prosleđuju ime
+	 * tabele koju je korisnik odabrao. Klasa UIDBFile takođe nasleđuje klasu
+	 * UIAbstractFile i u sebi sadrži imlementaciju metoda za učitavanje podataka,
+	 * dodavanje, izmenu, brisanje, pretragu i sortiranje
+	 */
+	public void mouseClicked(MouseEvent e) {
+		if (e.getButton()==MouseEvent.BUTTON1 && e.getClickCount()==2){
+			DefaultMutableTreeNode dbNode=(DefaultMutableTreeNode) this.getLastSelectedPathComponent();
+			if (dbNode instanceof EntitetView){
+				File uidbfile=new File(((EntitetView)(dbNode)).getEntitetModel().getName());
+				FileView fileView=new FileView(uidbfile);
+				MainFrame.getInstance().setFileView(fileView);
+			}
+		}
+	}
+	
 	
 	@Override
 	public void valueChanged(TreeSelectionEvent arg0) {
@@ -53,11 +76,39 @@ public class WorkspaceTree extends JTree implements TreeSelectionListener {
 		//da se zavrsi kad bude trebalo
 		
 	}
+
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	
 	
-	MouseListener ml = new MouseAdapter() {
+	/*MouseListener ml = new MouseAdapter() {
 	    public void mousePressed(MouseEvent e) {
 	        
 	    	int selRow = getRowForLocation(e.getX(), e.getY());
@@ -91,6 +142,6 @@ public class WorkspaceTree extends JTree implements TreeSelectionListener {
 	        
 	            
 	    }
-	};
+	};*/
 
 }

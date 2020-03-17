@@ -7,7 +7,9 @@
 package gui;
 
 import controller.ActionManager;
+import database.FileView;
 import tree.treeModel.TreeModelImplementacion;
+
 import gui.MyMenu;
 
 import java.awt.BorderLayout;
@@ -28,7 +30,7 @@ public class MainFrame extends JFrame {
 	public ActionManager actionManager;
 	public MyMenu myMenu;
 	public TablePanel tabelPanel;
-   
+    private FileView fileView;
 	private JPanel jPanel;
 	private MyMenu menu;
 	private JTabbedPane desktop;
@@ -121,6 +123,10 @@ public class MainFrame extends JFrame {
 		return desktop;
 	}
 	
-	
+	public void setFileView(FileView fileView) {
+		this.fileView = fileView;
+		desktop.add(fileView,fileView.getUiFile().getFileName());
+		desktop.setSelectedIndex(desktop.getComponentCount()-1);
+	}
    
 }
