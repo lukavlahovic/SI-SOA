@@ -72,7 +72,7 @@ public class File {
 	 */
 	public File(String tableName) {
 		
-		this.headerName=tableName+".db";
+		this.headerName=tableName;
 		this.TABLE_NAME=tableName;
 		this.fileName=headerName;
 	

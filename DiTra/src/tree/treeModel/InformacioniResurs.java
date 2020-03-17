@@ -14,7 +14,7 @@ public class InformacioniResurs extends Node implements java.util.Observer {
 
    
   
-   public java.util.Collection<Entitet> entiteti;
+   public ArrayList<Entitet> entiteti;
    
   
    public InformacioniResurs() {
@@ -23,22 +23,22 @@ public class InformacioniResurs extends Node implements java.util.Observer {
    
    
    /** @pdGenerated default getter */
-   public java.util.Collection<Entitet> getEntitet() {
+   public ArrayList<Entitet> getEntitet() {
       if (entiteti == null)
-         entiteti = new java.util.HashSet<Entitet>();
+         entiteti = new ArrayList<Entitet>();
       return entiteti;
    }
    
    /** @pdGenerated default iterator getter */
    public java.util.Iterator getIteratorEntitet() {
       if (entiteti == null)
-         entiteti = new java.util.HashSet<Entitet>();
+         entiteti = new ArrayList<Entitet>();
       return entiteti.iterator();
    }
    
    /** @pdGenerated default setter
      * @param newEntitet */
-   public void setEntitet(java.util.Collection<Entitet> newEntitet) {
+   public void setEntitet(ArrayList<Entitet> newEntitet) {
       removeAllEntitet();
       for (java.util.Iterator iter = newEntitet.iterator(); iter.hasNext();)
          addEntitet((Entitet)iter.next());
@@ -50,7 +50,7 @@ public class InformacioniResurs extends Node implements java.util.Observer {
       if (newEntitet == null)
          return;
       if (this.entiteti == null)
-         this.entiteti = new java.util.HashSet<Entitet>();
+         this.entiteti = new ArrayList<Entitet>();
       if (!this.entiteti.contains((Entitet)newEntitet))
          this.entiteti.add((Entitet)newEntitet);
    }

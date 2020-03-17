@@ -128,5 +128,9 @@ public class MainFrame extends JFrame {
 		desktop.add(fileView,fileView.getUiFile().getFileName());
 		desktop.setSelectedIndex(desktop.getComponentCount()-1);
 	}
+
+	public FileView getFileView() {
+		return fileView;
+	}
    
 }

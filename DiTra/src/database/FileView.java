@@ -33,6 +33,8 @@ import event.UpdateBlockEvent;
 import event.UpdateBlockListener;
 import event.UpdateOverZoneEvent;
 import event.UpdateOverZoneListener;
+import gui.AddView;
+import gui.DeleteView;
 import gui.TabelaModel;
 import tree.treeModel.Node;
 
@@ -77,10 +79,6 @@ public class FileView extends JPanel implements  UpdateBlockListener,UpdateOverZ
 		}
 		
 		
-		//ako radimo sa bazom podataka neće se prikazati toolbar sa parametrima za datoteke 
-		if (!uiFile.getHeaderName().contains(".db")){
-			initPanParams();
-		}
 		initPanToolbar();		
 		
 		
@@ -103,86 +101,12 @@ public class FileView extends JPanel implements  UpdateBlockListener,UpdateOverZ
 	}
 
 
-	
-    private void initPanParams(){
-    	JPanel panParams=new JPanel(new FlowLayout(FlowLayout.LEFT));
-		
-		
-		
-		//velicina bloka - moze da se menja
-		panParams.add(new JLabel("f (block factor):"));
-		txtBlockSize=new JTextField();
-		txtBlockSize.setColumns(5);
-		txtBlockSize.setText(String.valueOf(uiFile.getBLOCK_FACTOR()));
-		panParams.add(txtBlockSize);
-		JButton btnChangeBS=new JButton("Change f");
-		btnChangeBS.addActionListener(new ActionListener(){
-
-			public void actionPerformed(ActionEvent arg0) {
-				 
-				uiFile.setBLOCK_SIZE(Integer.valueOf(txtBlockSize.getText()).longValue());
-				txtBlockNum.setText(String.valueOf(uiFile.getBLOCK_NUM()));
-				
-			}
-			
-		});
-		panParams.add(btnChangeBS);
-
-		
-		//velicina datoteke
-		panParams.add(new JLabel("File size:"));
-		txtFileSize=new JTextField();
-		txtFileSize.setColumns(7);
-		txtFileSize.setEnabled(false);
-		
-		txtFileSize.setText(String.valueOf(Math.ceil(uiFile.getFILE_SIZE()/1024.0000))+"KB");
-		panParams.add(txtFileSize);
-		
-		
-
-		
-		
-		//velicina linije u datoteci  
-		panParams.add(new JLabel("Record size(B):"));
-		txtRecordSize=new JTextField();
-		txtRecordSize.setColumns(7);
-		txtRecordSize.setEnabled(false);
-		txtRecordSize.setText(String.valueOf(uiFile.getRECORD_SIZE()));
-		panParams.add(txtRecordSize);
-		
-		
-		//broj recorda u datoteci  
-		panParams.add(new JLabel("Record num:"));
-		txtRecordNum=new JTextField();
-		txtRecordNum.setColumns(7);
-		txtRecordNum.setEnabled(false);
-		txtRecordNum.setText(String.valueOf(uiFile.getRECORD_NUM()));
-		panParams.add(txtRecordNum);
-
-		
-		//broj blokova u datoteci  
-		panParams.add(new JLabel("Block num:"));
-		txtBlockNum=new JTextField();
-		txtBlockNum.setColumns(7);
-		txtBlockNum.setEnabled(false);
-		txtBlockNum.setText(String.valueOf(uiFile.getBLOCK_NUM()));
-		panParams.add(txtBlockNum);
-
-		
-		
-		
-		panParams.setBackground(new Color(153,204,255));
-		panTop.add(panParams, BorderLayout.NORTH);
-		
-		   	
-    	
-    }
 
      
     private void initPanToolbar(){
     	JPanel panToolbar=new JPanel(new FlowLayout(FlowLayout.RIGHT));
     	
-		JButton btnFetch=new JButton(!uiFile.getHeaderName().contains(".db")?"Fetch next block":"Refresh");
+		JButton btnFetch=new JButton("Refresh");
 		btnFetch.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent arg0) {
@@ -206,7 +130,8 @@ public class FileView extends JPanel implements  UpdateBlockListener,UpdateOverZ
 		btnAdd.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent arg0) {
-		
+				AddView av = new AddView();
+				
 			}
 			
 		});
@@ -223,10 +148,10 @@ public class FileView extends JPanel implements  UpdateBlockListener,UpdateOverZ
 			
 		});	
 		//update samo za .db fajlove
-		if (uiFile.getHeaderName().contains(".db")){
+		
 			
-			panToolbar.add(btnUpdate);	
-		}
+		panToolbar.add(btnUpdate);	
+		
 		
 		
 		
@@ -234,7 +159,7 @@ public class FileView extends JPanel implements  UpdateBlockListener,UpdateOverZ
 		btnDelete.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent arg0) {
-
+				DeleteView dv = new DeleteView();
 			}
 			
 		});		
@@ -252,18 +177,18 @@ public class FileView extends JPanel implements  UpdateBlockListener,UpdateOverZ
 		panToolbar.add(btnFind);
 
 		
-		if (uiFile.getHeaderName().contains(".db")){
-			JButton btnFilterFind=new JButton("Filter Find");
 		
-			btnFilterFind.addActionListener(new ActionListener(){
+		JButton btnFilterFind=new JButton("Filter Find");
+		
+		btnFilterFind.addActionListener(new ActionListener(){
 
 				public void actionPerformed(ActionEvent arg0) {
 
 				}
 			
 			});
-			panToolbar.add(btnFilterFind);
-		}
+		panToolbar.add(btnFilterFind);
+		
 		
 		
 	
@@ -307,5 +232,20 @@ public class FileView extends JPanel implements  UpdateBlockListener,UpdateOverZ
 		// TODO Auto-generated method stub
 		
 	}
+
+
+
+
+	public JTable getTable() {
+		return table;
+	}
+
+
+
+
+	public void setTable(JTable table) {
+		this.table = table;
+	}
+	
 }
 

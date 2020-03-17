@@ -6,13 +6,16 @@
 
 package appFramework;
 
+import java.sql.SQLException;
 import java.util.*;
+
+import tree.treeModel.Entitet;
 
 
 public interface Repository {
    
-   void add();
-   void remove();
+   void add(Entitet entitet, String[] redKojiSeDodaje) throws SQLException;
+   void remove(Entitet entitet, String[] redKojiSeDodaje) throws SQLException;;
    void update();
    void save();
 

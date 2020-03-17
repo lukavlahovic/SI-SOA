@@ -15,7 +15,7 @@ public class Entitet extends Node implements java.util.Observer {
   
 
     
-   public java.util.Collection<Atribut> atributi;
+   public ArrayList<Atribut> atributi;
    
    public java.util.Collection<Relacija> relacije;
    
@@ -27,22 +27,22 @@ public class Entitet extends Node implements java.util.Observer {
    
    
    /** @pdGenerated default getter */
-   public java.util.Collection<Atribut> getAtribut() {
+   public ArrayList<Atribut> getAtribut() {
       if (atributi == null)
-         atributi = new java.util.HashSet<Atribut>();
+         atributi = new ArrayList<Atribut>();
       return atributi;
    }
    
    /** @pdGenerated default iterator getter */
    public java.util.Iterator getIteratorAtribut() {
       if (atributi == null)
-         atributi = new java.util.HashSet<Atribut>();
+         atributi = new ArrayList<Atribut>();
       return atributi.iterator();
    }
    
    /** @pdGenerated default setter
      * @param newAtribut */
-   public void setAtribut(java.util.Collection<Atribut> newAtribut) {
+   public void setAtribut(ArrayList<Atribut> newAtribut) {
       removeAllAtribut();
       for (java.util.Iterator iter = newAtribut.iterator(); iter.hasNext();)
          addAtribut((Atribut)iter.next());
@@ -54,7 +54,7 @@ public class Entitet extends Node implements java.util.Observer {
       if (newAtribut == null)
          return;
       if (this.atributi == null)
-         this.atributi = new java.util.HashSet<Atribut>();
+         this.atributi = new ArrayList<Atribut>();
       if (!this.atributi.contains((Atribut)newAtribut))
          this.atributi.add((Atribut)newAtribut);
    }

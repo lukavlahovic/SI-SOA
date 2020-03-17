@@ -124,6 +124,11 @@ public class TreeModelImplementacion extends java.util.Observable implements Tre
 	public ConfigImplementation getConfig() {
 		return config;
 	}
+
+
+	public WorkspaceModel getWorkspaceModel() {
+		return workspaceModel;
+	}
    
    
 
