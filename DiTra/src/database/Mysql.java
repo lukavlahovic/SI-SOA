@@ -59,9 +59,28 @@ public class Mysql implements Repository {
 	}
 
 	@Override
-	public void update() {
-		// TODO Auto-generated method stub
+	public void update(Entitet entitet, String[] redKojiSeDodaje) throws SQLException {
+		String tableName = entitet.getName();
+		String statement = "UPDATE `"+tableName;
 		
+		statement+= "` SET ";
+		for (int i=0; i<entitet.getAtribut().size(); i++) 
+		{
+			if (i>0) statement+=",";
+			statement+= "`" + entitet.getAtribut().get(i).getName() + "` ";
+			statement+= "=";
+			statement+=  " '" + redKojiSeDodaje[i] + "'";
+		}
+		int k = entitet.getAtribut().size() - 1;
+		statement+= " WHERE ";
+		statement+= "`" + entitet.getAtribut().get(k).getName() + "` ";
+		statement+= "=";
+		statement+=  " '" + redKojiSeDodaje[k] + "'";
+		System.out.println(statement);
+		
+		PreparedStatement preparedStatement = MainFrame.getInstance().getModel().getConfig().getConnection().prepareStatement(statement);
+		
+		preparedStatement.executeUpdate();
 	}
 
 	@Override

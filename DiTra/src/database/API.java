@@ -37,8 +37,13 @@ public class API extends AbstractAPI {
 	}
 
 	@Override
-	public void update() {
-		// TODO Auto-generated method stub
+	public void update(Entitet entitet,String[] redKojiSeDodaje) {
+		try {
+			repository.update(entitet, redKojiSeDodaje);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 

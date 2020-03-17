@@ -36,6 +36,7 @@ import event.UpdateOverZoneListener;
 import gui.AddView;
 import gui.DeleteView;
 import gui.TabelaModel;
+import gui.UpdateView;
 import tree.treeModel.Node;
 
 
@@ -143,7 +144,7 @@ public class FileView extends JPanel implements  UpdateBlockListener,UpdateOverZ
 		btnUpdate.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent arg0) {
-
+				UpdateView uv = new UpdateView();
 			}
 			
 		});	

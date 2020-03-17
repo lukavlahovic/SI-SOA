@@ -15,8 +15,8 @@ import tree.treeModel.Entitet;
 public interface Repository {
    
    void add(Entitet entitet, String[] redKojiSeDodaje) throws SQLException;
-   void remove(Entitet entitet, String[] redKojiSeDodaje) throws SQLException;;
-   void update();
+   void remove(Entitet entitet, String[] redKojiSeDodaje) throws SQLException;
+   void update(Entitet entitet, String[] redKojiSeDodaje) throws SQLException;
    void save();
 
 }
