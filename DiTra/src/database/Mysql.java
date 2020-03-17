@@ -59,7 +59,7 @@ public class Mysql implements Repository {
 	}
 
 	@Override
-	public void update(Entitet entitet, String[] redKojiSeDodaje) throws SQLException {
+	public void update(Entitet entitet, String[] redKojiSeDodaje, String staraVrednost) throws SQLException {
 		String tableName = entitet.getName();
 		String statement = "UPDATE `"+tableName;
 		
@@ -75,7 +75,7 @@ public class Mysql implements Repository {
 		statement+= " WHERE ";
 		statement+= "`" + entitet.getAtribut().get(k).getName() + "` ";
 		statement+= "=";
-		statement+=  " '" + redKojiSeDodaje[k] + "'";
+		statement+=  " '" + staraVrednost + "'";
 		System.out.println(statement);
 		
 		PreparedStatement preparedStatement = MainFrame.getInstance().getModel().getConfig().getConnection().prepareStatement(statement);

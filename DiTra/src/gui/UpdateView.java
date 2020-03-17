@@ -55,6 +55,7 @@ public class UpdateView extends JDialog{
 			add(new Label(attribute.getName()));
 			add(nizPolja[i++]);
 		}
+		String staraVrednost = nizPolja[nizPolja.length-1].getText();
 		setLayout(new FlowLayout());
 		setSize(240, 100 * atributi.size());
 		
@@ -68,7 +69,7 @@ public class UpdateView extends JDialog{
 			try 
 			{
 				AbstractAPI api = new API(new Mysql());
-				api.update(entitet, redKojiSeDodaje);
+				api.update(entitet, redKojiSeDodaje,staraVrednost);
 			} 
 			catch (Exception e) 
 			{
