@@ -28,7 +28,6 @@ public class AtributView extends DefaultMutableTreeNode {
 		return atribut;
 	}
 	
-	
 	@Override
 	public String toString() {
 		return atribut.getName();

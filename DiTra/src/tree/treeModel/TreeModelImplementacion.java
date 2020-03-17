@@ -33,22 +33,7 @@ public class TreeModelImplementacion extends java.util.Observable implements Tre
    }
    
    
-   public void loadMetaSema() {
-	   /*Node ir = workspaceModel.getNodeFactory().makeNode("informacioni resurs");
-	   Node et = workspaceModel.getNodeFactory().makeNode("entitet");
-	   Node at = workspaceModel.getNodeFactory().makeNode("atribut");
-	   workspaceModel.addInfRe(ir);
-	   ((InformacioniResurs)ir).addEntitet(et);
-	   this.addObserver((Observer) ir);
-	   this.addObserver((Observer) et);
-	   setChanged();
-	   notifyObservers((Entitet)et);
-	   ((Entitet)et).addAtribut(at);
-	   setChanged();
-	   notifyObservers((Atribut)at);
-	   ir.setName("ir");
-	   et.setName("et");
-	   at.setName("at");*/
+   public void loadMetaSema() { //cita meta semu i pravi stablo
 	   try {
 		   Node ir = workspaceModel.getNodeFactory().makeNode("informacioni resurs");
 		   workspaceModel.addInfRe(ir);
@@ -59,10 +44,53 @@ public class TreeModelImplementacion extends java.util.Observable implements Tre
 		   while (rsTables.next()){
 			    String tableName=rsTables.getString("TABLE_NAME");
 			    Node et = workspaceModel.getNodeFactory().makeNode("entitet");
+			    this.addObserver((Observer) et);
 			    ((InformacioniResurs)ir).addEntitet(et);
 			    et.setName(tableName);
 			    setChanged();
 				notifyObservers((Entitet)et);
+				ResultSet rsColumns= dbMetaData.getColumns(null, null,tableName,null);
+				ResultSet pKeys= dbMetaData.getPrimaryKeys(null, null,tableName);
+				ArrayList<String> keys = new ArrayList<>();
+				while(pKeys.next()) {
+					keys.add(pKeys.getString("COLUMN_NAME"));
+				}
+				while (rsColumns.next()){
+					String columnName=rsColumns.getString("COLUMN_NAME"); 
+					Node at = workspaceModel.getNodeFactory().makeNode("atribut");
+					this.addObserver((Observer) at);
+					String dataType = rsColumns.getString("TYPE_NAME");
+					Node tip = workspaceModel.getNodeFactory().makeNode("opis");
+					tip.setName("Type: " + dataType);
+					String columnSize = rsColumns.getString("COLUMN_SIZE");
+					Node velicina = workspaceModel.getNodeFactory().makeNode("opis");
+					velicina.setName("Column size: " + columnSize);
+					
+					Node nulabilna = workspaceModel.getNodeFactory().makeNode("opis");
+					int nullable = rsColumns.getInt("NULLABLE");
+				    if (nullable == DatabaseMetaData.columnNullable) {
+				    	nulabilna.setName("Nullable: " + "true");
+				    }else {
+				    	nulabilna.setName("Nullable: " + "false");
+				    }
+					((Entitet)et).addAtribut(at);
+					at.setName(columnName);
+					if(keys.contains(columnName)) {
+						((Atribut)at).setKey(true);
+						keys.remove(columnName);
+					}
+					setChanged();
+					notifyObservers((Atribut)at);
+					((Atribut)at).getOpisi().add((Opis)tip);
+					setChanged();
+					notifyObservers((Opis) tip);
+					((Atribut)at).getOpisi().add((Opis)velicina);
+					setChanged();
+					notifyObservers((Opis) velicina);
+					((Atribut)at).getOpisi().add((Opis)nulabilna);
+					setChanged();
+					notifyObservers((Opis) nulabilna);
+				}
 		   }
 		
 		System.out.println(dbMetaData.getTables(null, null, null, dbTypes));

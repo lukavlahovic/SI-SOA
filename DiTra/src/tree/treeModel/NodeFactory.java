@@ -25,7 +25,8 @@ public class NodeFactory {
 		   		return new Entitet();
 	   else if(type.equals("atribut"))
 		   		return new Atribut();
-	   
+	   else if(type.equals("opis"))
+		   		return new Opis();
 	   return null;
     }
 
