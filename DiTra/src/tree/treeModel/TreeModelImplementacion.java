@@ -8,24 +8,33 @@ package tree.treeModel;
 
 import tree.treeModel.WorkspaceModel;
 import tree.treeView.WorkspaceTree;
+
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.*;
 
 import appFramework.TreeModel;
+import database.config.ConfigImplementation;
 
 public class TreeModelImplementacion extends java.util.Observable implements TreeModel {
    
    public WorkspaceModel workspaceModel;
    public WorkspaceTree workspaceTree;
+   private ConfigImplementation config;
    
-   public TreeModelImplementacion() {
+   
+   public TreeModelImplementacion(ConfigImplementation config) {
 	   createTreeModel();
 	   createTreeView();
 	   loadMetaSema();//test
+	
+	   this.config = config;
    }
    
    
    public void loadMetaSema() {
-	   Node ir = workspaceModel.getNodeFactory().makeNode("informacioni resurs");
+	   /*Node ir = workspaceModel.getNodeFactory().makeNode("informacioni resurs");
 	   Node et = workspaceModel.getNodeFactory().makeNode("entitet");
 	   Node at = workspaceModel.getNodeFactory().makeNode("atribut");
 	   workspaceModel.addInfRe(ir);
@@ -39,7 +48,29 @@ public class TreeModelImplementacion extends java.util.Observable implements Tre
 	   notifyObservers((Atribut)at);
 	   ir.setName("ir");
 	   et.setName("et");
-	   at.setName("at");
+	   at.setName("at");*/
+	   try {
+		   Node ir = workspaceModel.getNodeFactory().makeNode("informacioni resurs");
+		   workspaceModel.addInfRe(ir);
+		   this.addObserver((Observer) ir);
+		   DatabaseMetaData dbMetaData = config.getConnection().getMetaData();
+		   String[] dbTypes={"TABLE"};
+		   ResultSet rsTables=dbMetaData.getTables(null, null, null, dbTypes);
+		   while (rsTables.next()){
+			    String tableName=rsTables.getString("TABLE_NAME");
+			    Node et = workspaceModel.getNodeFactory().makeNode("entitet");
+			    ((InformacioniResurs)ir).addEntitet(et);
+			    et.setName(tableName);
+			    setChanged();
+				notifyObservers((Entitet)et);
+		   }
+		
+		System.out.println(dbMetaData.getTables(null, null, null, dbTypes));
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	   
    }
    
    public void createTreeModel() {

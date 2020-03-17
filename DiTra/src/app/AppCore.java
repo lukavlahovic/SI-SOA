@@ -16,5 +16,6 @@ public class AppCore extends AppFramework {
 		AppFramework af = new AppCore();
 		af.create();// kreira TreeModelImplementacion i GuiImplementation
 		af.getGui().createGui(af.getTree()); //kreira MainFrame i povezuje View sa Modelom
+		
 	}
 }

@@ -8,6 +8,7 @@ package appFramework;
 
 import java.util.*;
 
+import database.config.ConfigImplementation;
 import gui.GuiImplementation;
 import tree.treeModel.TreeModelImplementacion;
 
@@ -20,10 +21,12 @@ public abstract class AppFramework {
    
    	private GuiComponent gui;
    	private TreeModel tree;
+   	private ConfigComponent config;
    
    	public void create() {
 	   gui = new GuiImplementation();
-	   tree = new TreeModelImplementacion();
+	   config = new ConfigImplementation();
+	   tree = new TreeModelImplementacion(getConfig());
    	}
    	
 	public GuiImplementation getGui() {
@@ -32,6 +35,11 @@ public abstract class AppFramework {
 	
 	public TreeModelImplementacion getTree() {
 		return (TreeModelImplementacion) tree;
+	}
+	
+
+	public ConfigImplementation getConfig() {
+		return (ConfigImplementation)config;
 	}
 
 //-----------------------------IZ PD15--------------------------------------------
