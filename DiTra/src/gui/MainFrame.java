@@ -27,7 +27,7 @@ public class MainFrame extends JFrame {
 	public TreeModelImplementacion model;
 	public ActionManager actionManager;
 	public MyMenu myMenu;
-	public TabelPanel tabelPanel;
+	public TablePanel tabelPanel;
    
 	private JPanel jPanel;
 	private MyMenu menu;
@@ -105,7 +105,7 @@ public class MainFrame extends JFrame {
 		return myMenu;
 	}
 
-	public TabelPanel getTabelPanel() {
+	public TablePanel getTabelPanel() {
 		return tabelPanel;
 	}
 

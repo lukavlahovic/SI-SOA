@@ -36,6 +36,7 @@ public class TreeModelImplementacion extends java.util.Observable implements Tre
    public void loadMetaSema() { //cita meta semu i pravi stablo
 	   try {
 		   Node ir = workspaceModel.getNodeFactory().makeNode("informacioni resurs");
+		   ir.setName("informacioni resurs");
 		   workspaceModel.addInfRe(ir);
 		   this.addObserver((Observer) ir);
 		   DatabaseMetaData dbMetaData = config.getConnection().getMetaData();
@@ -117,6 +118,11 @@ public class TreeModelImplementacion extends java.util.Observable implements Tre
 
 	public WorkspaceTree getWorkspaceTree() {
 		return workspaceTree;
+	}
+
+
+	public ConfigImplementation getConfig() {
+		return config;
 	}
    
    

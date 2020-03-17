@@ -15,10 +15,12 @@ import javax.swing.JTree;
 import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreePath;
 
 import gui.MainFrame;
+import gui.TablePanel;
 import tree.treeModel.InformacioniResurs;
 import tree.treeModel.WorkspaceModel;
 
@@ -65,19 +67,19 @@ public class WorkspaceTree extends JTree implements TreeSelectionListener {
 	    	if(selRow != -1) {
 	            if(e.getClickCount() == 2) {
 	                
-	            	MutableTreeNode node = (MutableTreeNode) selPath.getLastPathComponent();
+	            	DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();
 	            	if(node instanceof EntitetView)
 	            	{
 	            		EntitetView entitet = (EntitetView) node;
 	           
 	            		
 	            		String title = ((InformacioniResursView)entitet.getParent()).getInformacioniResursModel().getName()+"-"+entitet.getEntitetModel().getName();   
+	            		System.out.println(entitet.getEntitetModel().toString());
+	            		TablePanel panel = new TablePanel(entitet.getEntitetModel());
 	            		
-	            		//TablePanel panel = new TablePanel(entitet.getEntitetModel());
+	            		MainFrame.getInstance().getDesktop().add(title,panel);
 	            		
-	            		//MainFrame.getInstance().getDesktop().add(title,panel);
-	            		
-	            		//MainFrame.getInstance().getDesktop().setSelectedComponent(panel);
+	            		MainFrame.getInstance().getDesktop().setSelectedComponent(panel);
 	            		
 	            		
 	            	}

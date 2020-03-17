@@ -22,10 +22,15 @@ public class ActionManager {
    /** @pdOid 146eda90-ec67-4457-ae99-be2f03cf8eeb
        @pdRoleInfo migr=yes name=DeleteRecordAction assc=association8 */
    private DeleteRecordAction deleteRecordAction;
-   
+   private FetchNextBlockAction fetchNextBlockAction;
    /** @pdOid 852c6242-e4b1-41dd-8309-532c72c2c355 */
    public ActionManager() {
       // TODO: implement
    }
+	public FetchNextBlockAction getFetchNextBlockAction() {
+		return fetchNextBlockAction;
+	}
+   
+   
 
 }
