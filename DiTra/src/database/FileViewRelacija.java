@@ -4,66 +4,34 @@ package database;
 
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Cursor;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
-
 import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTable;
-import javax.swing.JTextField;
-import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
-
-
 import event.UpdateBlockEvent;
 import event.UpdateBlockListener;
-import event.UpdateOverZoneEvent;
-import event.UpdateOverZoneListener;
-import gui.AddView;
 import gui.AddViewRelacija;
-import gui.DeleteView;
 import gui.DeleteViewRelacija;
 import gui.TabelaModel;
-import gui.UpdateView;
 import gui.UpdateViewRelacija;
-import tree.treeModel.Node;
+
 
 
 @SuppressWarnings("serial")
-public class FileViewRelacija extends JPanel implements  UpdateBlockListener,UpdateOverZoneListener,TreeSelectionListener{
+public class FileViewRelacija extends JPanel implements  UpdateBlockListener,TreeSelectionListener{
   
 	private File uiFile;
 	private JTable table;
-	
-	//tabela za prikaz slogova u zoni prekoračilaca
-	private JTable overZoneTable;
-	
 	private JPanel panTop;
-	private JTextField txtBlockSize;
-	private JTextField txtFileSize;
-	private JTextField txtRecordSize;
-	private JTextField txtRecordNum;
-	private JTextField txtBlockNum;
-
 	
-	
-	
-	private JTree indexTree;	
 	
 	public FileViewRelacija(final File uiFile) {
 		super();
@@ -160,36 +128,6 @@ public class FileViewRelacija extends JPanel implements  UpdateBlockListener,Upd
 			
 		});		
 		panToolbar.add(btnDelete);		
-		
-		JButton btnFind=new JButton("Find Record");
-		
-		btnFind.addActionListener(new ActionListener(){
-
-			public void actionPerformed(ActionEvent arg0) {
-			
-			}
-			
-		});
-		panToolbar.add(btnFind);
-
-		
-		
-		JButton btnFilterFind=new JButton("Filter Find");
-		
-		btnFilterFind.addActionListener(new ActionListener(){
-
-				public void actionPerformed(ActionEvent arg0) {
-
-				}
-			
-			});
-		panToolbar.add(btnFilterFind);
-		
-		
-		
-	
-
-
 
 		
         panTop.add(panToolbar,BorderLayout.CENTER);		
@@ -220,16 +158,6 @@ public class FileViewRelacija extends JPanel implements  UpdateBlockListener,Upd
 		}
 		
 	}
-
-
-
-	@Override
-	public void updateOverZonePerformed(UpdateOverZoneEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
 
 
 	public JTable getTable() {

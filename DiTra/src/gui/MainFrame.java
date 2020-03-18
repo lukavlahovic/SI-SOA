@@ -6,7 +6,7 @@
 
 package gui;
 
-import controller.ActionManager;
+
 import database.FileView;
 import tree.treeModel.TreeModelImplementacion;
 
@@ -27,9 +27,9 @@ public class MainFrame extends JFrame {
 	private static MainFrame instance = null;
 	public MainFrame mainFrame;
 	public TreeModelImplementacion model;
-	public ActionManager actionManager;
+
 	public MyMenu myMenu;
-	public TablePanel tabelPanel;
+	
     private FileView fileView;
 	private JPanel jPanel;
 	private MyMenu menu;
@@ -42,7 +42,6 @@ public class MainFrame extends JFrame {
 
 	private MainFrame()
 	{
-		setActionManager(new ActionManager());
 		System.out.println("Ucitan view");
 	}
    
@@ -52,9 +51,6 @@ public class MainFrame extends JFrame {
 		return instance;
 	}
 
-	public void setActionManager(ActionManager actionManager) {
-		this.actionManager = actionManager;
-	}
 
 	public void initialiseGUI() {
 	   Toolkit kit = Toolkit.getDefaultToolkit();
@@ -99,16 +95,9 @@ public class MainFrame extends JFrame {
 		return model;
 	}
 
-	public ActionManager getActionManager() {
-		return actionManager;
-	}
 
 	public MyMenu getMyMenu() {
 		return myMenu;
-	}
-
-	public TablePanel getTabelPanel() {
-		return tabelPanel;
 	}
 
 	public JPanel getjPanel() {

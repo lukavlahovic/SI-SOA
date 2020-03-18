@@ -83,10 +83,5 @@ public class Mysql implements Repository {
 		preparedStatement.executeUpdate();
 	}
 
-	@Override
-	public void save() {
-		// TODO Auto-generated method stub
-		
-	}
 
 }

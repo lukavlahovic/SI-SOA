@@ -22,7 +22,6 @@ import javax.swing.tree.TreePath;
 import database.File;
 import database.FileView;
 import gui.MainFrame;
-import gui.TablePanel;
 
 import tree.treeModel.InformacioniResurs;
 import tree.treeModel.WorkspaceModel;
@@ -107,41 +106,5 @@ public class WorkspaceTree extends JTree implements TreeSelectionListener,MouseL
 	
 	
 	
-	
-	/*MouseListener ml = new MouseAdapter() {
-	    public void mousePressed(MouseEvent e) {
-	        
-	    	int selRow = getRowForLocation(e.getX(), e.getY());
-	    	TreePath selPath = getPathForLocation(e.getX(), e.getY());
-	    	
-	    	
-	    	if(selRow != -1) {
-	            if(e.getClickCount() == 2) {
-	                
-	            	DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();
-	            	if(node instanceof EntitetView)
-	            	{
-	            		EntitetView entitet = (EntitetView) node;
-	           
-	            		
-	            		String title = ((InformacioniResursView)entitet.getParent()).getInformacioniResursModel().getName()+"-"+entitet.getEntitetModel().getName();   
-	            		System.out.println(entitet.getEntitetModel().toString());
-	            		TablePanel panel = new TablePanel(entitet.getEntitetModel());
-	            		
-	            		MainFrame.getInstance().getDesktop().add(title,panel);
-	            		
-	            		MainFrame.getInstance().getDesktop().setSelectedComponent(panel);
-	            		
-	            		
-	            	}
-	            	
-	     
-	            }
-	            
-	        }
-	        
-	            
-	    }
-	};*/
 
 }

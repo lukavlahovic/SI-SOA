@@ -9,7 +9,7 @@ public abstract class AbstractAPI {
 	abstract public void add(Entitet entitet,String[] redKojiSeDodaje);
 	abstract public void remove(Entitet entitet,String[] redKojiSeDodaje);
 	abstract public void update(Entitet entitet,String[] redKojiSeDodaje, String staraVrednost);
-	abstract public void save();
+
 	
 	public AbstractAPI(Repository repository) {
 		this.repository = repository;

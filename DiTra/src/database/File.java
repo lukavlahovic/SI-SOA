@@ -13,9 +13,6 @@ import event.UpdateBlockEvent;
 import event.UpdateBlockListener;
 import gui.MainFrame;
 
-
-
-
 public class File {
 
    	//velicina bloka u broju slogova koji se uzimaju u jednom zahvatu iz datoteke, tj. faktor blokiranja

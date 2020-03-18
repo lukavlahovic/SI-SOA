@@ -17,7 +17,7 @@ public class Entitet extends Node implements java.util.Observer {
     
    public ArrayList<Atribut> atributi;
    
-   public java.util.Collection<Relacija> relacije;
+  
    
 
    public Entitet() {
@@ -74,54 +74,7 @@ public class Entitet extends Node implements java.util.Observer {
       if (atributi != null)
          atributi.clear();
    }
-   /** @pdGenerated default getter */
-   public java.util.Collection<Relacija> getRelacija() {
-      if (relacije == null)
-         relacije = new java.util.HashSet<Relacija>();
-      return relacije;
-   }
-   
-   /** @pdGenerated default iterator getter */
-   public java.util.Iterator getIteratorRelacija() {
-      if (relacije == null)
-         relacije = new java.util.HashSet<Relacija>();
-      return relacije.iterator();
-   }
-   
-   /** @pdGenerated default setter
-     * @param newRelacija */
-   public void setRelacija(java.util.Collection<Relacija> newRelacija) {
-      removeAllRelacija();
-      for (java.util.Iterator iter = newRelacija.iterator(); iter.hasNext();)
-         addRelacija((Relacija)iter.next());
-   }
-   
-   /** @pdGenerated default add
-     * @param newRelacija */
-   public void addRelacija(Relacija newRelacija) {
-      if (newRelacija == null)
-         return;
-      if (this.relacije == null)
-         this.relacije = new java.util.HashSet<Relacija>();
-      if (!this.relacije.contains(newRelacija))
-         this.relacije.add(newRelacija);
-   }
-   
-   /** @pdGenerated default remove
-     * @param oldRelacija */
-   public void removeRelacija(Relacija oldRelacija) {
-      if (oldRelacija == null)
-         return;
-      if (this.relacije != null)
-         if (this.relacije.contains(oldRelacija))
-            this.relacije.remove(oldRelacija);
-   }
-   
-   /** @pdGenerated default removeAll */
-   public void removeAllRelacija() {
-      if (relacije != null)
-         relacije.clear();
-   }
+ 
 
 
 @Override
