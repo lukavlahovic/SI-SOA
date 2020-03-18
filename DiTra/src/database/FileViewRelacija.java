@@ -37,8 +37,10 @@ import event.UpdateOverZoneListener;
 import gui.AddView;
 import gui.AddViewRelacija;
 import gui.DeleteView;
+import gui.DeleteViewRelacija;
 import gui.TabelaModel;
 import gui.UpdateView;
+import gui.UpdateViewRelacija;
 import tree.treeModel.Node;
 
 
@@ -137,7 +139,7 @@ public class FileViewRelacija extends JPanel implements  UpdateBlockListener,Upd
 		btnUpdate.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent arg0) {
-				UpdateView uv = new UpdateView();
+				UpdateViewRelacija uv = new UpdateViewRelacija();
 			}
 			
 		});	
@@ -153,7 +155,7 @@ public class FileViewRelacija extends JPanel implements  UpdateBlockListener,Upd
 		btnDelete.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent arg0) {
-				DeleteView dv = new DeleteView();
+				DeleteViewRelacija dv = new DeleteViewRelacija();
 			}
 			
 		});		
