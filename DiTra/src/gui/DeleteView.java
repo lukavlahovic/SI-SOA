@@ -15,6 +15,7 @@ import javax.swing.JTable;
 
 import database.API;
 import database.AbstractAPI;
+import database.FileView;
 import database.Mysql;
 import tree.treeModel.Atribut;
 import tree.treeModel.Entitet;
@@ -32,7 +33,8 @@ public class DeleteView extends JDialog
 		public DeleteView() 
 		{
 			String nazivEntiteta = MainFrame.getInstance().getDesktop().getTitleAt(MainFrame.getInstance().getDesktop().getSelectedIndex());
-			table = MainFrame.getInstance().getFileView().getTable();//(MainFrame.getInstance().getDesktop().getSelectedIndex());	
+			FileView fv = (FileView) MainFrame.getInstance().getDesktop().getSelectedComponent();
+			table = fv.getTable();
 			int SelectedRowIndex = table.getSelectedRow();
 			InformacioniResurs informacioniResurs = MainFrame.getInstance().getModel().getWorkspaceModel().getInfResursi().get(0);
 			ArrayList<Entitet>listaEntiteta =  informacioniResurs.getEntitet();

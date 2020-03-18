@@ -35,6 +35,7 @@ import event.UpdateBlockListener;
 import event.UpdateOverZoneEvent;
 import event.UpdateOverZoneListener;
 import gui.AddView;
+import gui.AddViewRelacija;
 import gui.DeleteView;
 import gui.TabelaModel;
 import gui.UpdateView;
@@ -123,7 +124,7 @@ public class FileViewRelacija extends JPanel implements  UpdateBlockListener,Upd
 		btnAdd.addActionListener(new ActionListener(){
 
 			public void actionPerformed(ActionEvent arg0) {
-				AddView av = new AddView();
+				AddViewRelacija av = new AddViewRelacija();
 				
 			}
 			

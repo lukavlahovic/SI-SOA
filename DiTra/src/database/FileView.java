@@ -277,6 +277,12 @@ public class FileView extends JPanel implements  UpdateBlockListener,UpdateOverZ
 	    }
 	    return str;
 	}
+
+
+	public JTabbedPane getJtp() {
+		return jtp;
+	}
+	
 	
 }
 
