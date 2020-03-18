@@ -10,9 +10,6 @@ import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -39,14 +36,13 @@ import event.UpdateOverZoneEvent;
 import event.UpdateOverZoneListener;
 import gui.AddView;
 import gui.DeleteView;
-import gui.MainFrame;
 import gui.TabelaModel;
 import gui.UpdateView;
 import tree.treeModel.Node;
 
 
 @SuppressWarnings("serial")
-public class FileView extends JPanel implements  UpdateBlockListener,UpdateOverZoneListener,TreeSelectionListener{
+public class FileViewRelacija extends JPanel implements  UpdateBlockListener,UpdateOverZoneListener,TreeSelectionListener{
   
 	private File uiFile;
 	private JTable table;
@@ -60,14 +56,13 @@ public class FileView extends JPanel implements  UpdateBlockListener,UpdateOverZ
 	private JTextField txtRecordSize;
 	private JTextField txtRecordNum;
 	private JTextField txtBlockNum;
-	private JTabbedPane jtp;
-	private JSplitPane jsp;
-	private FileViewRelacija fileViewRelacija;
+
+	
 	
 	
 	private JTree indexTree;	
 	
-	public FileView(final File uiFile) {
+	public FileViewRelacija(final File uiFile) {
 		super();
 		this.uiFile=uiFile;
 		setLayout(new BorderLayout());
@@ -94,22 +89,8 @@ public class FileView extends JPanel implements  UpdateBlockListener,UpdateOverZ
 		JScrollPane scr=new JScrollPane(table);
 		
 		
-		jtp = new JTabbedPane();
-		jsp = new JSplitPane(JSplitPane.VERTICAL_SPLIT,scr,jtp);
-		jsp.setDividerLocation(300);
-		this.add(jsp);
-		
-		try {
-			for(String s: printForeignKeys(uiFile.getTABLE_NAME()))
-			{
-				setFileViewRelacija(new FileViewRelacija(new File(s)));
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 			
-		//add(scr,BorderLayout.CENTER);
+		add(scr,BorderLayout.CENTER);
 		
 	
 	}
@@ -257,25 +238,6 @@ public class FileView extends JPanel implements  UpdateBlockListener,UpdateOverZ
 
 	public void setTable(JTable table) {
 		this.table = table;
-	}
-	
-	public void setFileViewRelacija(FileViewRelacija fileViewRelacija) {
-		this.fileViewRelacija = fileViewRelacija;
-		jtp.add(fileViewRelacija,fileViewRelacija.getUiFile().getFileName());
-		jtp.setSelectedIndex(jtp.getComponentCount()-1);
-	}
-	
-	public ArrayList<String> printForeignKeys(String tableName) throws SQLException {
-		ArrayList<String> str = new ArrayList<>();
-		Connection c = MainFrame.getInstance().getModel().getConfig().getConnection();
-	    DatabaseMetaData metaData = c.getMetaData();
-	    ResultSet foreignKeys = metaData.getImportedKeys(c.getCatalog(), null, tableName);
-	    while (foreignKeys.next()) {
-	    	if(!str.contains(foreignKeys.getString("PKTABLE_NAME")))
-	    		str.add(foreignKeys.getString("PKTABLE_NAME"));
-	       
-	    }
-	    return str;
 	}
 	
 }
