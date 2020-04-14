@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8f450f7e-5a21-418e-b46f-f37e919336ce" name="Default Changelist" comment="" />
+    <list default="true" id="8f450f7e-5a21-418e-b46f-f37e919336ce" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/DiTra.iml" beforeDir="false" afterPath="$PROJECT_DIR$/DiTra.iml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -12,13 +16,29 @@
   </component>
   <component name="ProjectId" id="1aXPCaojjy0s5ozIqAofOl8bkqe" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2229885" />
     <property name="settings.editor.selected.configurable" value="vcs.Git" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Ditra config" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="app.AppCore" />
+      <module name="DiTra" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -31,10 +51,45 @@
       <option name="presentableId" value="Default" />
       <updated>1586878838606</updated>
       <workItem from="1586878847943" duration="32000" />
+      <workItem from="1586880548307" duration="310000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="2" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="166" y="0" width="1024" height="733" key="#Project_Structure" timestamp="1586880604075">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="166" y="0" width="1024" height="733" key="#Project_Structure/0.0.1366.738@0.0.1366.738" timestamp="1586880604075" />
+    <state x="141" y="26" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1586880753492">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="141" y="26" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.738@0.0.1366.738" timestamp="1586880753492" />
+    <state x="415" y="161" width="525" height="409" key="#com.intellij.ide.util.TreeClassChooserDialog" timestamp="1586880682775">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="415" y="161" width="525" height="409" key="#com.intellij.ide.util.TreeClassChooserDialog/0.0.1366.738@0.0.1366.738" timestamp="1586880682775" />
+    <state width="1324" height="177" key="GridCell.Tab.0.bottom" timestamp="1586880860055">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1324" height="177" key="GridCell.Tab.0.bottom/0.0.1366.738@0.0.1366.738" timestamp="1586880860055" />
+    <state width="1324" height="177" key="GridCell.Tab.0.center" timestamp="1586880860053">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1324" height="177" key="GridCell.Tab.0.center/0.0.1366.738@0.0.1366.738" timestamp="1586880860053" />
+    <state width="1324" height="177" key="GridCell.Tab.0.left" timestamp="1586880860053">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1324" height="177" key="GridCell.Tab.0.left/0.0.1366.738@0.0.1366.738" timestamp="1586880860053" />
+    <state width="1324" height="177" key="GridCell.Tab.0.right" timestamp="1586880860054">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state width="1324" height="177" key="GridCell.Tab.0.right/0.0.1366.738@0.0.1366.738" timestamp="1586880860054" />
+    <state x="166" y="0" width="1024" height="733" key="SettingsEditor" timestamp="1586880807934">
+      <screen x="0" y="0" width="1366" height="738" />
+    </state>
+    <state x="166" y="0" width="1024" height="733" key="SettingsEditor/0.0.1366.738@0.0.1366.738" timestamp="1586880807934" />
   </component>
 </project>
