@@ -15,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
 
 import database.API;
 import database.AbstractAPI;
+import database.Broker;
 import database.Mysql;
 import tree.treeModel.Atribut;
 import tree.treeModel.Entitet;
@@ -71,7 +72,7 @@ public class AddView extends JDialog
 			try 
 			{
 
-				AbstractAPI api = new API(new Mysql());
+				AbstractAPI api = new API(new Broker());
 				api.add(entitet, redKojiSeDodaje);
 				//MainFrame.getInstance().getModel().loadMetaSema();
 				//((StateView) this.getParent()).startOffState();
