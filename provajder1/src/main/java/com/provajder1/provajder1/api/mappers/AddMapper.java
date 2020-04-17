@@ -7,4 +7,6 @@ import org.mapstruct.factory.Mappers;
 public interface AddMapper {
 
     AddMapper istance = Mappers.getMapper(AddMapper.class);
+
+
 }
