@@ -7,6 +7,8 @@ import com.provajder1.provajder1.services.AddService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Map;
+
 @Service
 public class AddServiceImpl implements AddService {
 
@@ -27,7 +29,32 @@ public class AddServiceImpl implements AddService {
 //        return true;
 //    }
     public boolean addTK(AddDTO addDTO) {
-        System.out.println("Entitet " + addDTO.getEntitet() + " atributi " + addDTO.getAtributi().toString());
+        String command = "INSERT INTO `" + addDTO.getEntitet() + "` (`"; //ULO_OZNAKA`,`ULO_NAZIV`) VALUES ('" + ulo_oznaka + "','" + ulo_naziv + "');";
+        int i = 0;
+        for(Map.Entry<String,String> entry : addDTO.getAtributi().entrySet())
+        {
+            command += entry.getKey() + "`";
+            if(i < addDTO.getAtributi().size() - 1)
+            {
+                command += ",`";
+            }
+            i++;
+        }
+        command += ") VALUES ('";
+        int j = 0;
+        for(Map.Entry<String,String> entry : addDTO.getAtributi().entrySet())
+        {
+            command += entry.getValue() + "'";
+            if(j < addDTO.getAtributi().size() - 1)
+            {
+                command += ",'";
+            }
+            j++;
+        }
+        command += ");";
+
+        //System.out.println("Entitet " + addDTO.getEntitet() + " atributi " + addDTO.getAtributi().toString());
+        bootstrap.getTemplate().execute(command);
         return true;
     }
 }
