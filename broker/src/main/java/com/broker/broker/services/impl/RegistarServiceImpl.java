@@ -1,8 +1,11 @@
 package com.broker.broker.services.impl;
 
+
 import com.broker.broker.domain.Provajder;
+import com.broker.broker.mappers.EndpointMapper;
 import com.broker.broker.mappers.ProvajderMapper;
 import com.broker.broker.model.ProvajderDTO;
+import com.broker.broker.repository.EndpointRepository;
 import com.broker.broker.repository.ProvajderRepository;
 import com.broker.broker.services.RegistarService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,4 +31,5 @@ public class RegistarServiceImpl implements RegistarService {
 
         return true;
     }
+
 }

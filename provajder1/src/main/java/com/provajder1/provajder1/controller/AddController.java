@@ -29,7 +29,7 @@ public class AddController {
 //                                                  String ulo_oznaka, @RequestParam (value = "ulo_naziv", required = true) String ulo_naziv){
 //        return new ResponseEntity<Boolean>(addService.addTK(ulo_oznaka,ulo_naziv), HttpStatus.OK);
 //    }
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST , value = "/add")
         public ResponseEntity<Boolean> addRow(@RequestBody AddDTO addDTO){
             return new ResponseEntity<Boolean>(addService.addTK(addDTO), HttpStatus.OK);
         }

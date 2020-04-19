@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ProvajderRepository extends JpaRepository<Provajder,String> {
 
-//    Provajder findByName(String name);
+    Provajder findByUsername(String username);
 
 }

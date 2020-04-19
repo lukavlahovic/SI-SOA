@@ -17,7 +17,7 @@ public class Broker implements Repository {
     @Override
     public void add(Entitet entitet, String[] redKojiSeDodaje) throws SQLException {
         CloseableHttpClient client = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost("http://localhost:8081/api/teski");
+        HttpPost httpPost = new HttpPost("http://localhost:8080/provajder1/teski/add");//u provajderu http://localhost:8081/api/teski/add
 
         String json = "{ \"entitet\":\"" + entitet.getName() + "\",\"atributi\":{";
         for(int i=0;i<entitet.getAtribut().size();i++){
