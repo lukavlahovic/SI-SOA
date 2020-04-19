@@ -11,10 +11,7 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
-import database.API;
-import database.AbstractAPI;
-import database.FileView;
-import database.Mysql;
+import database.*;
 import tree.treeModel.Atribut;
 import tree.treeModel.Entitet;
 import tree.treeModel.InformacioniResurs;
@@ -70,7 +67,7 @@ public class UpdateView extends JDialog{
 
 			try 
 			{
-				AbstractAPI api = new API(new Mysql());
+				AbstractAPI api = new API(new Broker());
 				api.update(entitet, redKojiSeDodaje,staraVrednost);
 			} 
 			catch (Exception e) 

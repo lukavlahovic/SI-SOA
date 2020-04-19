@@ -49,11 +49,73 @@ public class Broker implements Repository {
 
     @Override
     public void remove(Entitet entitet, String[] redKojiSeDodaje) throws SQLException {
+        CloseableHttpClient client = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost("http://localhost:8080/provajder1/teski/delete");//u provajderu http://localhost:8081/api/teski/add
 
+        String json = "{ \"entitet\":\"" + entitet.getName() + "\",\"atributi\":{";
+
+        json += "\"" + entitet.getAtribut().get(0) + "\":" + "\"" + redKojiSeDodaje[0] + "\"";
+
+
+        json += "}}";
+        System.out.println(json);
+        StringEntity entity = new StringEntity(json);
+        httpPost.setEntity(entity);
+        httpPost.setHeader("Accept", "application/json");
+        httpPost.setHeader("Content-type", "application/json");
+
+        try {
+            CloseableHttpResponse response = client.execute(httpPost);
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader((response.getEntity().getContent())));
+
+            String output;
+            System.out.println("Output from Server .... \n");
+            while ((output = br.readLine()) != null) {
+                System.out.println(output);
+            }
+            client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void update(Entitet entitet, String[] redKojiSeDodaje, String staraVrednost) throws SQLException {
+
+        CloseableHttpClient client = HttpClients.createDefault();
+        HttpPost httpPost = new HttpPost("http://localhost:8080/provajder1/teski/update");//u provajderu http://localhost:8081/api/teski/add
+
+        String json = "{ \"entitet\":\"" + entitet.getName() + "\",\"atributi\":{";
+        for(int i=0;i<entitet.getAtribut().size();i++){
+            json += "\"" + entitet.getAtribut().get(i) + "\":" + "\"" + redKojiSeDodaje[i] + "\"";
+            if (i<entitet.getAtribut().size()-1) json+=",";
+        }
+        //
+        json += "},";
+        json += "\"" + "staravrednost" + "\":" +"{"+ "\"" + entitet.getAtribut().get(entitet.getAtribut().size()-1) +  "\":" + "\"" + staraVrednost + "\"";
+        json += "}}";
+        System.out.println(json);
+        StringEntity entity = new StringEntity(json);
+        httpPost.setEntity(entity);
+        httpPost.setHeader("Accept", "application/json");
+        httpPost.setHeader("Content-type", "application/json");
+
+        try {
+            CloseableHttpResponse response = client.execute(httpPost);
+            BufferedReader br = new BufferedReader(
+                    new InputStreamReader((response.getEntity().getContent())));
+
+            String output;
+            System.out.println("Output from Server .... \n");
+            while ((output = br.readLine()) != null) {
+                System.out.println(output);
+            }
+            client.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
 
     }
 }

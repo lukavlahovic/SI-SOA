@@ -1,17 +1,16 @@
 package database;
 
+import event.UpdateBlockEvent;
+import event.UpdateBlockListener;
+import gui.MainFrame;
+
+import javax.swing.event.EventListenerList;
 import java.io.IOException;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
-import javax.swing.event.EventListenerList;
-
-import event.UpdateBlockEvent;
-import event.UpdateBlockListener;
-import gui.MainFrame;
 
 public class File {
 

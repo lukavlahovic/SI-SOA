@@ -1,6 +1,7 @@
 package com.provajder1.provajder1.controller;
 
 import com.provajder1.provajder1.api.model.AddDTO;
+import com.provajder1.provajder1.api.model.UpdateDTO;
 import com.provajder1.provajder1.services.AddService;
 import com.provajder1.provajder1.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ public class AddController {
 
     private AddService addService;
 
+
     @Autowired
     public AddController(AddService addService){
         this.addService = addService;
@@ -33,5 +35,12 @@ public class AddController {
         public ResponseEntity<Boolean> addRow(@RequestBody AddDTO addDTO){
             return new ResponseEntity<Boolean>(addService.addTK(addDTO), HttpStatus.OK);
         }
-
+    @RequestMapping(method = RequestMethod.POST , value = "/delete")
+    public ResponseEntity<Boolean> deleteRow(@RequestBody AddDTO addDTO){
+        return new ResponseEntity<Boolean>(addService.deleteTK(addDTO), HttpStatus.OK);
+    }
+    @RequestMapping(method = RequestMethod.POST , value = "/update")
+    public ResponseEntity<Boolean> updateRow(@RequestBody UpdateDTO addDTO){
+        return new ResponseEntity<Boolean>(addService.updateTK(addDTO), HttpStatus.OK);
+    }
 }
