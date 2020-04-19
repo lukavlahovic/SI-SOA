@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import java.util.Map;
+
 @Controller
 public class RegistarController {
 
@@ -35,7 +37,7 @@ public class RegistarController {
     //localhost:8080/provajder1/teski/add               localhost:8080/provajder1/teski/delete
     @RequestMapping(method = RequestMethod.POST, value = "/{provajder}/{servis}/{endpoint}")
     public ResponseEntity<Object> pozoviProvajdera(@PathVariable String provajder, @PathVariable String servis, @PathVariable String endpoint,
-                                                            @RequestBody Podaci podaci){
-        return povezivanjeNaProvajdera.pozoviProvajdera(provajder,servis,endpoint,podaci);
+                                                   @RequestBody Map<String,Object> map){
+        return povezivanjeNaProvajdera.pozoviProvajdera(provajder,servis,endpoint,map);
     }
 }

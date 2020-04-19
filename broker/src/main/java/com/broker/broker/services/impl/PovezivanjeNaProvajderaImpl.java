@@ -8,6 +8,8 @@ import com.broker.broker.repository.EndpointRepository;
 import com.broker.broker.repository.ProvajderRepository;
 import com.broker.broker.repository.ServisRepository;
 import com.broker.broker.services.PovezivanjeNaProvajdera;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -22,6 +24,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.Map;
+
 @Service
 public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
 
@@ -39,7 +43,7 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
     }
 
     @Override
-    public ResponseEntity<Object> pozoviProvajdera(String username, String servis, String ruta, Podaci podaci) {
+    public ResponseEntity<Object> pozoviProvajdera(String username, String servis, String ruta, Map<String,Object> map) {
         //sastavim http zahtev za provajdera, return je response od provajdera
         Provajder provajder = provajderRepository.findByUsername(username);
         String url = "http://" + provajder.getHost() + servisRepository.findByNameAndProvajder(servis,provajder).getRuta();//localhost:8081 + /teski
@@ -50,7 +54,7 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
         CloseableHttpClient client = HttpClients.createDefault();
         if(endpoint.getZahtev().equals("POST")){
             HttpPost httpPost = new HttpPost(url);
-            String json = "{\"entitet\":\"" + podaci.getEntitet() + "\",\"atributi\":{";
+            /*String json = "{\"entitet\":\"" + podaci.getEntitet() + "\",\"atributi\":{";
             int brojac = 0;
             for(String atribut : podaci.getAtributi().keySet()){
                 json += "\"" + atribut + "\":\"" + podaci.getAtributi().get(atribut) + "\"";
@@ -59,7 +63,15 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
                 }
                 brojac++;
             }
-            json += "}}";
+            json += "}}";*/
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = null;
+            try {
+                json = objectMapper.writeValueAsString(map);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
             try {
                 StringEntity entity = new StringEntity(json);
                 httpPost.setEntity(entity);
