@@ -1,7 +1,6 @@
 package com.provajder1.provajder1.controller;
 
 import com.provajder1.provajder1.api.model.AddDTO;
-import com.provajder1.provajder1.api.model.SelectDTO;
 import com.provajder1.provajder1.api.model.UpdateDTO;
 import com.provajder1.provajder1.services.AddService;
 import com.provajder1.provajder1.utils.Constants;
@@ -12,8 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -21,11 +22,12 @@ import java.util.Map;
 public class AddController {
 
     private AddService addService;
-
+    private HttpServletRequest request;
 
     @Autowired
-    public AddController(AddService addService){
+    public AddController(AddService addService,HttpServletRequest request){
         this.addService = addService;
+        this.request = request;
     }
 
     //localhost:8080/api/teski/add?ulo_oznaka=bb&ulo_naziv=cc
@@ -35,9 +37,9 @@ public class AddController {
 //        return new ResponseEntity<Boolean>(addService.addTK(ulo_oznaka,ulo_naziv), HttpStatus.OK);
 //    }
     @RequestMapping(method = RequestMethod.POST , value = "/add")
-        public ResponseEntity<Boolean> addRow(@RequestBody AddDTO addDTO){
-            return new ResponseEntity<Boolean>(addService.addTK(addDTO), HttpStatus.OK);
-        }
+    public ResponseEntity<Boolean> addRow(@RequestBody AddDTO addDTO){
+        return new ResponseEntity<Boolean>(addService.addTK(addDTO), HttpStatus.OK);
+    }
     @RequestMapping(method = RequestMethod.POST , value = "/delete")
     public ResponseEntity<Boolean> deleteRow(@RequestBody AddDTO addDTO){
         return new ResponseEntity<Boolean>(addService.deleteTK(addDTO), HttpStatus.OK);
@@ -48,8 +50,23 @@ public class AddController {
     }
 
     @RequestMapping(method = RequestMethod.GET , value = "/select")
-    public ResponseEntity<Map<String,Object>> selectRow(@RequestBody SelectDTO selectDTO){
-        return new ResponseEntity<Map<String,Object>>(addService.selectTK(selectDTO), HttpStatus.OK);
+    public ResponseEntity<Map<String,Object>> selectRow(){
+        Map<String,String> map = getHeadersInfo();
+        return new ResponseEntity<Map<String,Object>>(addService.selectTK(map), HttpStatus.OK);
+    }
+
+    private Map<String, String> getHeadersInfo() {
+
+        Map<String, String> map = new HashMap<String, String>();
+
+        Enumeration headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String key = (String) headerNames.nextElement();
+            String value = request.getHeader(key);
+            map.put(key, value);
+        }
+
+        return map;
     }
 
 }

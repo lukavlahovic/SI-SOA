@@ -12,6 +12,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -48,23 +49,11 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
         //sastavim http zahtev za provajdera, return je response od provajdera
         Provajder provajder = provajderRepository.findByUsername(username);
         String url = "http://" + provajder.getHost() + servisRepository.findByNameAndProvajder(servis,provajder).getRuta();//localhost:8081 + /teski
-        System.out.println("PRE ENDPOINTA " + url);
         Endpoint endpoint = endpointRepository.findByRuta("/" + ruta);
         url += endpoint.getRuta(); //localhost:8081/api/teski + /add
-        System.out.println("POSLE ENDPOINTA " + url);
         CloseableHttpClient client = HttpClients.createDefault();
         if(endpoint.getZahtev().equals("POST")){
             HttpPost httpPost = new HttpPost(url);
-            /*String json = "{\"entitet\":\"" + podaci.getEntitet() + "\",\"atributi\":{";
-            int brojac = 0;
-            for(String atribut : podaci.getAtributi().keySet()){
-                json += "\"" + atribut + "\":\"" + podaci.getAtributi().get(atribut) + "\"";
-                if(brojac<podaci.getAtributi().size()-1){
-                    json+=",";
-                }
-                brojac++;
-            }
-            json += "}}";*/
             ObjectMapper objectMapper = new ObjectMapper();
             String json = null;
             try {
@@ -98,17 +87,8 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
         }
 
         if(endpoint.getZahtev().equals("GET")){
-            HttpPost httpPost = new HttpPost(url);
-            /*String json = "{\"entitet\":\"" + podaci.getEntitet() + "\",\"atributi\":{";
-            int brojac = 0;
-            for(String atribut : podaci.getAtributi().keySet()){
-                json += "\"" + atribut + "\":\"" + podaci.getAtributi().get(atribut) + "\"";
-                if(brojac<podaci.getAtributi().size()-1){
-                    json+=",";
-                }
-                brojac++;
-            }
-            json += "}}";*/
+            System.out.println("MAPA JE " + map.toString());
+            HttpGet httpPost = new HttpGet(url);
             ObjectMapper objectMapper = new ObjectMapper();
             String json = null;
             try {
@@ -119,7 +99,9 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
 
             try {
                 StringEntity entity = new StringEntity(json);
-                httpPost.setEntity(entity);
+                for(String kljuc : map.keySet()){
+                    httpPost.setHeader(kljuc,(String)map.get(kljuc));
+                }
                 httpPost.setHeader("Accept", "application/json");
                 httpPost.setHeader("Content-type", "application/json");
                 CloseableHttpResponse response = client.execute(httpPost);

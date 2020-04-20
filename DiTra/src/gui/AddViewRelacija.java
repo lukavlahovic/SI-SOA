@@ -13,11 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
-import database.API;
-import database.AbstractAPI;
-import database.FileView;
-import database.FileViewRelacija;
-import database.Mysql;
+import database.*;
 import tree.treeModel.Atribut;
 import tree.treeModel.Entitet;
 import tree.treeModel.InformacioniResurs;
@@ -75,7 +71,7 @@ public class AddViewRelacija extends JDialog
 			try 
 			{
 
-				AbstractAPI api = new API(new Mysql());
+				AbstractAPI api = new API(new Broker());
 				api.add(entitet, redKojiSeDodaje);
 				//MainFrame.getInstance().getModel().loadMetaSema();
 				//((StateView) this.getParent()).startOffState();

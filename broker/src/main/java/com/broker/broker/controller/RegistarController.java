@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.Map;
 
 @Controller
@@ -20,12 +23,14 @@ public class RegistarController {
 
     private RegistarService registarService;
     private PovezivanjeNaProvajdera povezivanjeNaProvajdera;
+    private HttpServletRequest request;
 
     @Autowired
-    public RegistarController(RegistarService registarService,PovezivanjeNaProvajdera povezivanjeNaProvajdera){
+    public RegistarController(RegistarService registarService,PovezivanjeNaProvajdera povezivanjeNaProvajdera, HttpServletRequest request){
 
         this.registarService = registarService;
         this.povezivanjeNaProvajdera = povezivanjeNaProvajdera;
+        this.request = request;
     }
 
 
@@ -41,8 +46,22 @@ public class RegistarController {
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/{provajder}/{servis}/{endpoint}")
-    public ResponseEntity<Object> pozoviProvajdera1(@PathVariable String provajder, @PathVariable String servis, @PathVariable String endpoint,
-                                                   @RequestBody Map<String,Object> map){
+    public ResponseEntity<Object> pozoviProvajdera1(@PathVariable String provajder, @PathVariable String servis, @PathVariable String endpoint){
+        Map<String,Object> map = getHeadersInfo();
         return povezivanjeNaProvajdera.pozoviProvajdera(provajder,servis,endpoint,map);
+    }
+
+
+    private Map<String, Object> getHeadersInfo() {
+
+        Map<String, Object> map = new HashMap<String, Object>();
+
+        Enumeration headerNames = request.getHeaderNames();
+        while (headerNames.hasMoreElements()) {
+            String key = (String) headerNames.nextElement();
+            Object value = request.getHeader(key);
+            map.put(key, value);
+        }
+        return map;
     }
 }
