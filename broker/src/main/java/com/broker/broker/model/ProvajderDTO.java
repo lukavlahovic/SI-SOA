@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class ProvajderDTO {
 
-    String name;
-    String host;
-    String password;
+    private String name;
+    private String host;
+    private String password;
 }

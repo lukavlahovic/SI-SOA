@@ -7,6 +7,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface EndpointMapper {
+
     EndpointMapper instance = Mappers.getMapper(EndpointMapper.class);
 
     Endpoint endpointDTOToEndpoint(EndpointDTO endpointDTO);

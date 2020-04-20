@@ -4,9 +4,11 @@ import lombok.Data;
 
 @Data
 public class EndpointDTO {
+
     private Long id;
     private String ruta;
     private String zahtev;
     private String input;
     private String output;
+
 }

@@ -1,7 +1,6 @@
 package com.broker.broker.controller;
 
 
-import com.broker.broker.model.Podaci;
 import com.broker.broker.model.ProvajderDTO;
 import com.broker.broker.services.PovezivanjeNaProvajdera;
 import com.broker.broker.services.RegistarService;
