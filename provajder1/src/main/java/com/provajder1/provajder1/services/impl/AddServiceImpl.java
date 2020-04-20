@@ -2,6 +2,7 @@ package com.provajder1.provajder1.services.impl;
 
 import com.provajder1.provajder1.api.mappers.AddMapper;
 import com.provajder1.provajder1.api.model.AddDTO;
+import com.provajder1.provajder1.api.model.SelectDTO;
 import com.provajder1.provajder1.api.model.UpdateDTO;
 import com.provajder1.provajder1.bootstrap.Bootstrap;
 import com.provajder1.provajder1.services.AddService;
@@ -9,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -74,6 +78,29 @@ public class AddServiceImpl implements AddService {
         }
         bootstrap.getTemplate().execute(command);
         return true;
+    }
+
+    public Map<String,Object> selectTK(SelectDTO addDTO) {
+        String command = "SELECT " + addDTO.getAtributi() + " FROM " + addDTO.getEntitet(); //ULO_OZNAKA`,`ULO_NAZIV`) VALUES ('" + ulo_oznaka + "','" + ulo_naziv + "');";
+
+
+        //System.out.println("Entitet " + addDTO.getEntitet() + " atributi " + addDTO.getAtributi().toString());
+        List results = bootstrap.getTemplate().queryForList(command);
+        Map<String,Object> mapa = new HashMap<>();
+        for(Object r : ((Map)results.get(0)).keySet())
+        {
+            mapa.put((String)r,new ArrayList<String>());
+        }
+        for(Object result: results)
+        {
+            Map map = (Map) result;
+            for(Object key: map.keySet())
+            {
+                ((ArrayList<String>)mapa.get(key)).add((String) map.get(key));
+            }
+        }
+        System.out.println(mapa);
+        return mapa;
     }
 
     public boolean updateTK(UpdateDTO addDTO) {

@@ -1,6 +1,7 @@
 package com.provajder1.provajder1.controller;
 
 import com.provajder1.provajder1.api.model.AddDTO;
+import com.provajder1.provajder1.api.model.SelectDTO;
 import com.provajder1.provajder1.api.model.UpdateDTO;
 import com.provajder1.provajder1.services.AddService;
 import com.provajder1.provajder1.utils.Constants;
@@ -12,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.Map;
 
 @Controller
 @RequestMapping(Constants.CATEGORY_BASE_URL)
@@ -43,4 +46,10 @@ public class AddController {
     public ResponseEntity<Boolean> updateRow(@RequestBody UpdateDTO addDTO){
         return new ResponseEntity<Boolean>(addService.updateTK(addDTO), HttpStatus.OK);
     }
+
+    @RequestMapping(method = RequestMethod.GET , value = "/select")
+    public ResponseEntity<Map<String,Object>> selectRow(@RequestBody SelectDTO selectDTO){
+        return new ResponseEntity<Map<String,Object>>(addService.selectTK(selectDTO), HttpStatus.OK);
+    }
+
 }

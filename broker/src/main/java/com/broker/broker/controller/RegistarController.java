@@ -39,4 +39,10 @@ public class RegistarController {
                                                    @RequestBody Map<String,Object> map){
         return povezivanjeNaProvajdera.pozoviProvajdera(provajder,servis,endpoint,map);
     }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/{provajder}/{servis}/{endpoint}")
+    public ResponseEntity<Object> pozoviProvajdera1(@PathVariable String provajder, @PathVariable String servis, @PathVariable String endpoint,
+                                                   @RequestBody Map<String,Object> map){
+        return povezivanjeNaProvajdera.pozoviProvajdera(provajder,servis,endpoint,map);
+    }
 }

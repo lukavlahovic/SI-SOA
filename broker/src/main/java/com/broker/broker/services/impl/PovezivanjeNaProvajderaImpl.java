@@ -16,6 +16,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -95,6 +96,50 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
                 e.printStackTrace();
             }
         }
+
+        if(endpoint.getZahtev().equals("GET")){
+            HttpPost httpPost = new HttpPost(url);
+            /*String json = "{\"entitet\":\"" + podaci.getEntitet() + "\",\"atributi\":{";
+            int brojac = 0;
+            for(String atribut : podaci.getAtributi().keySet()){
+                json += "\"" + atribut + "\":\"" + podaci.getAtributi().get(atribut) + "\"";
+                if(brojac<podaci.getAtributi().size()-1){
+                    json+=",";
+                }
+                brojac++;
+            }
+            json += "}}";*/
+            ObjectMapper objectMapper = new ObjectMapper();
+            String json = null;
+            try {
+                json = objectMapper.writeValueAsString(map);
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+
+            try {
+                StringEntity entity = new StringEntity(json);
+                httpPost.setEntity(entity);
+                httpPost.setHeader("Accept", "application/json");
+                httpPost.setHeader("Content-type", "application/json");
+                CloseableHttpResponse response = client.execute(httpPost);
+                String result = EntityUtils.toString(response.getEntity());
+                Map<String,String> mapa = objectMapper.readValue(result,Map.class);
+
+
+                Object o = mapa;
+                client.close();
+                return new ResponseEntity<Object>(o,HttpStatus.OK);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (ClientProtocolException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+
         return null;
     }
 }

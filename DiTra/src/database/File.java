@@ -1,16 +1,28 @@
 package database;
 
+import com.mysql.cj.xdevapi.JsonArray;
 import event.UpdateBlockEvent;
 import event.UpdateBlockListener;
 import gui.MainFrame;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.hc.core5.http.ParseException;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.io.entity.StringEntity;
 
 import javax.swing.event.EventListenerList;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class File {
 
@@ -116,45 +128,82 @@ public class File {
 		
 		
 		//broj slogova u tabeli :
-		Statement stmt0=MainFrame.getInstance().getModel().getConfig().getConnection().createStatement();
-		ResultSet rs0=stmt0.executeQuery("SELECT COUNT(*) as broj FROM "+TABLE_NAME);
-		if (rs0.next()){
-		
-			RECORD_NUM=rs0.getInt(1);
-		}
-		stmt0.close();
-		rs0.close();
-		
-		
-		//formiranje dela upita za SELECT sql nad tabelom
-		String columnParams=null;
-		for (int i=0;i<fields.size();i++){
-			if (columnParams==null){
-				columnParams=fields.get(i).getFieldName();
-			}else{
-				columnParams+=","+fields.get(i).getFieldName();
-			}
-			
-		}
-		
-		Statement stmt=MainFrame.getInstance().getModel().getConfig().getConnection().createStatement();
-		ResultSet rs=stmt.executeQuery("SELECT "+columnParams+" FROM "+TABLE_NAME);
-		
-		
-		data = new String[(int) RECORD_NUM][];
+//		Statement stmt0=MainFrame.getInstance().getModel().getConfig().getConnection().createStatement();
+//		ResultSet rs0=stmt0.executeQuery("SELECT COUNT(*) as broj FROM "+TABLE_NAME);
+//		if (rs0.next()){
+//
+//			RECORD_NUM=rs0.getInt(1);
+//		}
+//		stmt0.close();
+//		rs0.close();
 
-		//u objektu ResultSet-a rs nalaze se svi podaci iz date tabele
-		//iz result set-a se podaci čitaju i prebacuju u matricu data[][]
-		int i=0;
-		while (rs.next()){
-			data[i]=new String [fields.size()];
-			for (int j=0;j<fields.size();j++){
-				data[i][j]=rs.getString(j+1);
-			}
-			i++;
+		CloseableHttpClient client = HttpClients.createDefault();
+		HttpPost httpPost = new HttpPost("http://localhost:8080/provajder1/teski/select");
+
+		String json = "{ \"entitet\":\"" + TABLE_NAME + "\",\"atributi\":\"";
+		for(int i=0;i<fields.size();i++){
+			json += fields.get(i);
+			if (i<fields.size()-1)
+				json+=",";
 		}
-		System.out.println("broj slogova:"+(TABLE_NAME));
-		System.out.println("broj slogova:"+(i++));
+		json += "\"}";
+
+		System.out.println(json);
+		StringEntity entity = new StringEntity(json);
+		httpPost.setEntity(entity);
+		httpPost.setHeader("Accept", "application/json");
+		httpPost.setHeader("Content-type", "application/json");
+
+		try {
+			CloseableHttpResponse response = client.execute(httpPost);
+			String result = EntityUtils.toString(response.getEntity());
+
+			Map<String,String> myMap = new HashMap<>();
+			String[] pairs = result.split(",");
+			for(int i = 0; i < pairs.length; i++)
+			{
+				String pair = pairs[i];
+				String[]keyValue = pair.split(":");
+				myMap.put(keyValue[0],keyValue[1]);
+			}
+			System.out.println(myMap);
+
+			client.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+
+		//formiranje dela upita za SELECT sql nad tabelom
+//		String columnParams=null;
+//		for (int i=0;i<fields.size();i++){
+//			if (columnParams==null){
+//				columnParams=fields.get(i).getFieldName();
+//			}else{
+//				columnParams+=","+fields.get(i).getFieldName();
+//			}
+//
+//		}
+//
+//		Statement stmt=MainFrame.getInstance().getModel().getConfig().getConnection().createStatement();
+//		ResultSet rs=stmt.executeQuery("SELECT "+columnParams+" FROM "+TABLE_NAME);
+		
+//		data = new String[(int) RECORD_NUM][];
+//
+//		//u objektu ResultSet-a rs nalaze se svi podaci iz date tabele
+//		//iz result set-a se podaci čitaju i prebacuju u matricu data[][]
+//		int i=0;
+//		while (rs.nexStrit()){
+////			data[i]=new ng [fields.size()];
+//			for (int j=0;j<fields.size();j++){
+//				data[i][j]=rs.getString(j+1);
+//			}
+//			i++;
+//		}
+//		System.out.println("broj slogova:"+(TABLE_NAME));
+//		System.out.println("broj slogova:"+(i++));
 		fireUpdateBlockPerformed();
 		return true;
 	}
