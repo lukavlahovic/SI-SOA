@@ -19,17 +19,17 @@ import java.util.List;
 @Service
 public class MyUserDetailsService implements UserDetailsService {
 
-    private UserRepository UserRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    public MyUserDetailsService(UserRepository customerRepository) {
-        this.UserRepository = customerRepository;
+    public MyUserDetailsService(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 
-        UserBroker userBroker = UserRepository.findByUsername(s);
+        UserBroker userBroker = userRepository.findByUsername(s);
 
         if (userBroker == null) throw new UsernameNotFoundException(s);
 

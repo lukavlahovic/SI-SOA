@@ -7,6 +7,7 @@ import com.broker.broker.services.RegistarService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,12 +37,13 @@ public class RegistarController {
         return new ResponseEntity<Boolean>(registarService.registruj(provajderDTO,role,host), HttpStatus.OK);
     }
     //localhost:8080/provajder1/teski/add               localhost:8080/provajder1/teski/delete
+    @PreAuthorize("hasRole('USER')")
     @RequestMapping(method = RequestMethod.POST, value = "/{provajder}/{servis}/{endpoint}")
     public ResponseEntity<Object> pozoviProvajdera(@PathVariable String provajder, @PathVariable String servis, @PathVariable String endpoint,
                                                    @RequestBody Map<String,Object> map){
         return povezivanjeNaProvajdera.pozoviProvajdera(provajder,servis,endpoint,map);
     }
-
+    @PreAuthorize("hasRole('USER')")
     @RequestMapping(method = RequestMethod.GET, value = "/{provajder}/{servis}/{endpoint}")
     public ResponseEntity<Object> pozoviProvajdera1(@PathVariable String provajder, @PathVariable String servis, @PathVariable String endpoint){
         Map<String,Object> map = getHeadersInfo();

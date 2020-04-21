@@ -38,6 +38,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         try{
             UserBroker creds = new ObjectMapper()
                     .readValue(req.getInputStream(), UserBroker.class);
+            System.out.println(creds.toString());
 
             return authenticationManager.authenticate(
 

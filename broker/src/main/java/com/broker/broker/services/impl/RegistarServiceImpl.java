@@ -37,15 +37,16 @@ public class RegistarServiceImpl implements RegistarService {
         UserBroker provajder = provajderMapper.provajderDTOtoprovajder(provajderDTO);
         Role uloga = roleRepository.findByName(role);
         provajder.getRoles().add(uloga);
-        userRepository.save(provajder);
+
         if(role.equals("PROVAJDER"))
         {
             Provajder p = new Provajder();
             p.setUserBroker(provajder);
             p.setHost(host);
             provajderRepository.save(p);
-        }
 
+        }
+        userRepository.save(provajder);
         return true;
     }
 

@@ -9,6 +9,7 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.core5.http.ParseException;
+import org.apache.hc.core5.http.ProtocolException;
 import org.apache.hc.core5.http.io.entity.EntityUtils;
 import org.apache.hc.core5.http.io.entity.StringEntity;
 import org.json.JSONArray;
@@ -142,6 +143,15 @@ public class File {
 
 		CloseableHttpClient client = HttpClients.createDefault();
 		HttpPost httpPost = new HttpPost("http://localhost:8080/provajder1/teski/select");
+		httpPost.addHeader("username","teskiKlijent");
+		httpPost.addHeader("password","1234");
+		CloseableHttpResponse response1 = client.execute(httpPost);
+		try {
+			httpPost.addHeader("Authorization",response1.getHeader("Authorization"));
+		} catch (ProtocolException e) {
+			e.printStackTrace();
+		}
+
 
 		String json = "{ \"entitet\":\"" + TABLE_NAME + "\",\"atributi\":\"";
 		for(int i=0;i<fields.size();i++){
