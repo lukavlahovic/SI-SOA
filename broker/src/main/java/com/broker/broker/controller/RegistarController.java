@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Enumeration;
@@ -35,8 +32,8 @@ public class RegistarController {
 
 
     @RequestMapping(method = RequestMethod.POST, value = "/registracija")
-    public ResponseEntity<Boolean> addRow(@RequestBody ProvajderDTO provajderDTO){
-        return new ResponseEntity<Boolean>(registarService.registruj(provajderDTO), HttpStatus.OK);
+    public ResponseEntity<Boolean> addRow(@RequestBody ProvajderDTO provajderDTO, @RequestHeader("role") String role,@RequestHeader("host") String host){
+        return new ResponseEntity<Boolean>(registarService.registruj(provajderDTO,role,host), HttpStatus.OK);
     }
     //localhost:8080/provajder1/teski/add               localhost:8080/provajder1/teski/delete
     @RequestMapping(method = RequestMethod.POST, value = "/{provajder}/{servis}/{endpoint}")

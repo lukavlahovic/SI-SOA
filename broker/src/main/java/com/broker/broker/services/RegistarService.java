@@ -7,6 +7,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface RegistarService {
 
-    boolean registruj(ProvajderDTO provajderDTO);
+    boolean registruj(ProvajderDTO provajderDTO, String role, String host);
 
 }
