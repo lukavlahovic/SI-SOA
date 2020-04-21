@@ -2,6 +2,7 @@ package com.broker.broker.domain;
 
 import lombok.Data;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,14 +10,17 @@ import java.util.List;
 @Entity
 public class Provajder {
 //localhost:8081/teski/service?functions=AVG
+
     @Id
     private String  username;
 
-    @Column
-    private String host;
+    @OneToOne(fetch = FetchType.LAZY)
+    @MapsId
+    private UserBroker userBroker;
+
 
     @Column
-    private String password;
+    private String host;
 
     @OneToMany(mappedBy = "provajder")
     private List<Servis> listaServisa = new ArrayList<>();
