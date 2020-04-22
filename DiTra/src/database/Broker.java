@@ -1,5 +1,6 @@
 package database;
 
+import app.Constants;
 import appFramework.Repository;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -30,6 +31,7 @@ public class Broker implements Repository {
         httpPost.setEntity(entity);
         httpPost.setHeader("Accept", "application/json");
         httpPost.setHeader("Content-type", "application/json");
+        httpPost.setHeader("Authorization", Constants.getToken());
 
         try {
             CloseableHttpResponse response = client.execute(httpPost);

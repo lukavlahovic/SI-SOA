@@ -11,6 +11,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
@@ -39,6 +40,8 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             UserBroker creds = new ObjectMapper()
                     .readValue(req.getInputStream(), UserBroker.class);
             System.out.println(creds.toString());
+           // BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            //System.out.println(encoder.encode(creds.getPassword()));
 
             return authenticationManager.authenticate(
 

@@ -7,6 +7,5 @@ import lombok.Data;
 public class ProvajderDTO {
 
     private String name;
-    private String host;
     private String password;
 }

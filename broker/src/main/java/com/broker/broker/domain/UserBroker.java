@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 public class UserBroker  {
 
+
     @Id
     private String  username;
 
@@ -20,7 +21,7 @@ public class UserBroker  {
 
 
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(
             name = "USER_ROLES",
             joinColumns = {@JoinColumn(name = "USERNAME")},

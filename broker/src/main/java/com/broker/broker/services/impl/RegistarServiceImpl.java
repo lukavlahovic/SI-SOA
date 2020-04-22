@@ -13,6 +13,7 @@ import com.broker.broker.repository.RoleRepository;
 import com.broker.broker.repository.UserRepository;
 import com.broker.broker.services.RegistarService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -35,9 +36,13 @@ public class RegistarServiceImpl implements RegistarService {
     public boolean registruj(ProvajderDTO provajderDTO, String role, String host) {
 
         UserBroker provajder = provajderMapper.provajderDTOtoprovajder(provajderDTO);
+        System.out.println(provajder.toString());
         Role uloga = roleRepository.findByName(role);
         provajder.getRoles().add(uloga);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
+        String pas = encoder.encode(provajder.getPassword());
+        provajder.setPassword(pas);
         if(role.equals("PROVAJDER"))
         {
             Provajder p = new Provajder();

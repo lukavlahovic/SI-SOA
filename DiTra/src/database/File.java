@@ -1,9 +1,12 @@
 package database;
 
+
+import app.Constants;
 import com.mysql.cj.xdevapi.JsonArray;
 import event.UpdateBlockEvent;
 import event.UpdateBlockListener;
 import gui.MainFrame;
+import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
@@ -142,15 +145,14 @@ public class File {
 //		rs0.close();
 
 		CloseableHttpClient client = HttpClients.createDefault();
-		HttpPost httpPost = new HttpPost("http://localhost:8080/provajder1/teski/select");
-		httpPost.addHeader("username","teskiKlijent");
-		httpPost.addHeader("password","1234");
-		CloseableHttpResponse response1 = client.execute(httpPost);
+		HttpGet httpGet = new HttpGet("http://localhost:8080/provajder1/teski/select");
+
+		/*
 		try {
 			httpPost.addHeader("Authorization",response1.getHeader("Authorization"));
 		} catch (ProtocolException e) {
 			e.printStackTrace();
-		}
+		}*/
 
 
 		String json = "{ \"entitet\":\"" + TABLE_NAME + "\",\"atributi\":\"";
@@ -163,12 +165,13 @@ public class File {
 
 		System.out.println(json);
 		StringEntity entity = new StringEntity(json);
-		httpPost.setEntity(entity);
-		httpPost.setHeader("Accept", "application/json");
-		httpPost.setHeader("Content-type", "application/json");
+		httpGet.setEntity(entity);
+		httpGet.setHeader("Accept", "application/json");
+		httpGet.setHeader("Content-type", "application/json");
+		httpGet.setHeader("Authorization", Constants.getToken());
 
 		try {
-			CloseableHttpResponse response = client.execute(httpPost);
+			CloseableHttpResponse response = client.execute(httpGet);
 			JSONObject myObj = new JSONObject(EntityUtils.toString(response.getEntity()));
 			int duzina = myObj.getJSONArray(fields.get(0).getFieldName()).length();
 			data = new String[(int) duzina][];
