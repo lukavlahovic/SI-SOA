@@ -88,23 +88,24 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
 
         if(endpoint.getZahtev().equals("GET")){
             System.out.println("MAPA JE " + map.toString());
-            HttpGet httpPost = new HttpGet(url);
+            HttpGet httpGet = new HttpGet(url);
             ObjectMapper objectMapper = new ObjectMapper();
-            String json = null;
-            try {
+            String json = (String) map.get("podaci");
+            /*try {
                 json = objectMapper.writeValueAsString(map);
             } catch (JsonProcessingException e) {
                 e.printStackTrace();
-            }
+            }*/
 
             try {
-                StringEntity entity = new StringEntity(json);
+                /*StringEntity entity = new StringEntity(json);
                 for(String kljuc : map.keySet()){
                     httpPost.setHeader(kljuc,(String)map.get(kljuc));
-                }
-                httpPost.setHeader("Accept", "application/json");
-                httpPost.setHeader("Content-type", "application/json");
-                CloseableHttpResponse response = client.execute(httpPost);
+                }*/
+                httpGet.setHeader("podaci",json);
+                httpGet.setHeader("Accept", "application/json");
+                httpGet.setHeader("Content-type", "application/json");
+                CloseableHttpResponse response = client.execute(httpGet);
                 String result = EntityUtils.toString(response.getEntity());
                 Map<String,String> mapa = objectMapper.readValue(result,Map.class);
 

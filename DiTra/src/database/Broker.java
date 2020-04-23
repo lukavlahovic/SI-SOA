@@ -65,6 +65,7 @@ public class Broker implements Repository {
         httpPost.setEntity(entity);
         httpPost.setHeader("Accept", "application/json");
         httpPost.setHeader("Content-type", "application/json");
+        httpPost.setHeader("Authorization", Constants.getToken());
 
         try {
             CloseableHttpResponse response = client.execute(httpPost);
@@ -102,6 +103,7 @@ public class Broker implements Repository {
         httpPost.setEntity(entity);
         httpPost.setHeader("Accept", "application/json");
         httpPost.setHeader("Content-type", "application/json");
+        httpPost.setHeader("Authorization", Constants.getToken());
 
         try {
             CloseableHttpResponse response = client.execute(httpPost);

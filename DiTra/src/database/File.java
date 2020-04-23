@@ -6,6 +6,7 @@ import com.mysql.cj.xdevapi.JsonArray;
 import event.UpdateBlockEvent;
 import event.UpdateBlockListener;
 import gui.MainFrame;
+
 import org.apache.hc.client5.http.classic.methods.HttpGet;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
@@ -146,7 +147,6 @@ public class File {
 
 		CloseableHttpClient client = HttpClients.createDefault();
 		HttpGet httpGet = new HttpGet("http://localhost:8080/provajder1/teski/select");
-
 		/*
 		try {
 			httpPost.addHeader("Authorization",response1.getHeader("Authorization"));
@@ -155,17 +155,15 @@ public class File {
 		}*/
 
 
-		String json = "{ \"entitet\":\"" + TABLE_NAME + "\",\"atributi\":\"";
+		String json = "entitet:" + TABLE_NAME + ";atributi:";
 		for(int i=0;i<fields.size();i++){
 			json += fields.get(i);
 			if (i<fields.size()-1)
 				json+=",";
 		}
-		json += "\"}";
 
 		System.out.println(json);
-		StringEntity entity = new StringEntity(json);
-		httpGet.setEntity(entity);
+		httpGet.setHeader("podaci",json);
 		httpGet.setHeader("Accept", "application/json");
 		httpGet.setHeader("Content-type", "application/json");
 		httpGet.setHeader("Authorization", Constants.getToken());

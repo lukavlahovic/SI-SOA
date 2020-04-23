@@ -80,7 +80,8 @@ public class AddServiceImpl implements AddService {
     }
 
     public Map<String,Object> selectTK(Map<String,String> podaci) {
-        String command = "SELECT " + podaci.get("atributi") + " FROM " + podaci.get("entitet"); //ULO_OZNAKA`,`ULO_NAZIV`) VALUES ('" + ulo_oznaka + "','" + ulo_naziv + "');";
+        String[] json = podaci.get("podaci").split(";"); // {entitet:ROLE, atributi:ULO_NAZIV,ULO_OZNAKA}
+        String command = "SELECT " + json[1].split(":")[1] + " FROM " + json[0].split(":")[1]; //ULO_OZNAKA`,`ULO_NAZIV`) VALUES ('" + ulo_oznaka + "','" + ulo_naziv + "');";
 
         System.out.println("COMANADA JE " + command);
         //System.out.println("Entitet " + addDTO.getEntitet() + " atributi " + addDTO.getAtributi().toString());
