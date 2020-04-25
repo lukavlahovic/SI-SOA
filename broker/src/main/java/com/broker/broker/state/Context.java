@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Context {
@@ -19,6 +20,9 @@ public class Context {
         this.servisRepository = servisRepository;
         for(Servis servis:servisRepository.findAll()){
             contextAttributes.add(new ContextAttribute(servis.getProvajder().getHost() + servis.getRuta()));
+        }
+        for(ContextAttribute contextAttribute:contextAttributes){
+            System.out.println("CONTEXT ATRIBUT ZA SERVIS " + contextAttribute.getServis());
         }
     }
 

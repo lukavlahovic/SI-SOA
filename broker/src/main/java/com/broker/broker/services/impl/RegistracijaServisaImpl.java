@@ -69,10 +69,6 @@ public class RegistracijaServisaImpl implements RegistracijaServisa {
             servisRepository.save(ser);
         }
 
-
-
-
-
         return true;
     }
 }

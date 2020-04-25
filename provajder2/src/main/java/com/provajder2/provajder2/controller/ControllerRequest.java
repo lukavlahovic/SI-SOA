@@ -25,17 +25,17 @@ public class ControllerRequest {
     }
 
 
-    @RequestMapping(method = RequestMethod.POST, value = "/gmail")
+    @RequestMapping(method = RequestMethod.POST, value = "/gmail/send")
     public ResponseEntity<Boolean> sendGmail(){
         return new ResponseEntity<Boolean>(services.gmail_slanje(), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/yahoo")
+    @RequestMapping(method = RequestMethod.POST, value = "/yahoo/send")
     public ResponseEntity<Boolean> sendYahoo(){
         return new ResponseEntity<Boolean>(services.yahoo_mail(), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/prosek")
+    @RequestMapping(method = RequestMethod.POST, value = "/prosek/avg")
     public ResponseEntity<Boolean> prosek(){
         return new ResponseEntity<Boolean>(services.prosek(), HttpStatus.OK);
     }

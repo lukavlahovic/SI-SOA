@@ -40,7 +40,7 @@ public class RegistarController {
     @PreAuthorize("hasRole('USER')")
     @RequestMapping(method = RequestMethod.POST, value = "/{provajder}/{servis}/{endpoint}")
     public ResponseEntity<Object> pozoviProvajdera(@PathVariable String provajder, @PathVariable String servis, @PathVariable String endpoint,
-                                                   @RequestBody Map<String,Object> map){
+                                                   @RequestBody(required = false) Map<String,Object> map){
         return povezivanjeNaProvajdera.pozoviProvajdera(provajder,servis,endpoint,map);
     }
     @PreAuthorize("hasRole('USER')")
