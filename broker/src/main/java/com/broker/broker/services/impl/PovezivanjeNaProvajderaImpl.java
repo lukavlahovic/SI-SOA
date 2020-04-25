@@ -8,6 +8,7 @@ import com.broker.broker.repository.EndpointRepository;
 import com.broker.broker.repository.ProvajderRepository;
 import com.broker.broker.repository.ServisRepository;
 import com.broker.broker.services.PovezivanjeNaProvajdera;
+import com.broker.broker.state.Context;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.client.ClientProtocolException;
@@ -35,6 +36,7 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
     private EndpointRepository endpointRepository;
     private ProvajderRepository provajderRepository;
     private ServisRepository servisRepository;
+    private Context context;
 
     public PovezivanjeNaProvajderaImpl(EndpointMapper endpointMapper, EndpointRepository endpointRepository,ProvajderRepository provajderRepository,
                                        ServisRepository servisRepository){
@@ -42,6 +44,7 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
         this.endpointRepository = endpointRepository;
         this.provajderRepository = provajderRepository;
         this.servisRepository = servisRepository;
+        this.context = new Context(servisRepository);
     }
 
     @Override
