@@ -1,6 +1,7 @@
 package com.broker.broker.controller;
 
 import com.broker.broker.model.ServiceDTO;
+import com.broker.broker.model.SlozenDTO;
 import com.broker.broker.services.RegistracijaServisa;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -26,6 +27,12 @@ public class RegServiceController {
     @RequestMapping(method = RequestMethod.POST, value = "/registracija/servisa")
     public ResponseEntity<Boolean> addRow(@RequestBody ServiceDTO serviceDTO, @RequestHeader("provajder") String username ){
         return new ResponseEntity<Boolean>(registracijaServisa.registrujServis(serviceDTO,username), HttpStatus.OK);
+    }
+
+    @PreAuthorize("hasRole('PROVAJDER')")
+    @RequestMapping(method = RequestMethod.POST, value = "/registracija/slozenservis")
+    public ResponseEntity<Boolean> slozenServis(@RequestBody SlozenDTO slozenDTO, @RequestHeader("provajder") String username,@RequestHeader("servisi") String servisi ){
+        return new ResponseEntity<Boolean>(registracijaServisa.registrujSlozenServis(slozenDTO,username,servisi), HttpStatus.OK);
     }
 
 

@@ -20,6 +20,9 @@ public class Servis {
     @Column
     private String name;
 
+    @Column
+    private String tip;
+
     @ManyToOne
     private Provajder provajder;
 
