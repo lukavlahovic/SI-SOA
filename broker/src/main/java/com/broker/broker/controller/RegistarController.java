@@ -38,8 +38,8 @@ public class RegistarController {
     }
     //localhost:8080/provajder1/teski/add               localhost:8080/provajder1/teski/delete
     @PreAuthorize("hasRole('USER')")
-    @RequestMapping(method = RequestMethod.POST, value = "/{provajder}/{servis}/{endpoint}")
-    public ResponseEntity<Object> pozoviProvajdera(@PathVariable String provajder, @PathVariable String servis, @PathVariable String endpoint,
+    @RequestMapping(method = RequestMethod.POST, value = {"/{provajder}/{servis}/{endpoint}","/{provajder}/{servis}/"})
+    public ResponseEntity<Object> pozoviProvajdera(@PathVariable String provajder, @PathVariable String servis, @PathVariable(required = false) String endpoint,
                                                    @RequestBody(required = false) Map<String,Object> map){
         return povezivanjeNaProvajdera.pozoviProvajdera(provajder,servis,endpoint,map);
     }

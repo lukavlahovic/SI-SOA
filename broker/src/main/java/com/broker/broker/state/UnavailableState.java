@@ -10,14 +10,14 @@ public class UnavailableState implements State {
 
     @Override
     public boolean getService(ContextAttribute contextAttribute) {
-        System.out.println("Service is in unavailable state");
+        System.out.println("Service " + contextAttribute.getServis() + " is in unavailable state");
         return false;
-        //contextAttribute.setState(this);
     }
 
     @Override
     public boolean changeState(ContextAttribute contextAttribute) {
         contextAttribute.setState(contextAttribute.getAvailableState());
+        System.out.println("SERVIS " + contextAttribute.getServis() + " IS NOW AVAILABLE");
         return true;
     }
 

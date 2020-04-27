@@ -10,15 +10,14 @@ public class AvailableState implements State {
 
     @Override
     public boolean getService(ContextAttribute contextAttribute) {
-        System.out.println("Service is in available state");
-        //nesto radi
-        System.out.println(contextAttribute.getServis());
+        System.out.println("Service " + contextAttribute.getServis() + " is in available state");
         return true;
     }
 
     @Override
     public boolean changeState(ContextAttribute contextAttribute) {
         contextAttribute.setState(contextAttribute.getUnavailableState());
+        System.out.println("SERVIS " + contextAttribute.getServis() + " IS NOW UNAVAILABLE");
         return true;
     }
 

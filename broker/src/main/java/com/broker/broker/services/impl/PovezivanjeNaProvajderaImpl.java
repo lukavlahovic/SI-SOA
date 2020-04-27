@@ -62,22 +62,70 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
             CloseableHttpClient client = HttpClients.createDefault();
             CloseableHttpResponse response;
             ObjectMapper objectMapper = new ObjectMapper();
+            Object o = null;
+            int i=0;
+            String tip = "";
             for(Servis s : slozenServis.getListaServisa()){
-                if(context.isAvailable(provajder.getHost() + s.getRuta())){
+                if(!tip.equals(s.getTip()) && context.isAvailable(s.getProvajder().getHost() + s.getRuta())){
+                    context.changeState(s.getProvajder().getHost() + s.getRuta());
+                    tip = s.getTip();
                     Endpoint endpoint = s.getListaEndpointa().get(0);
-                    String url = "http://" + provajder.getHost() + s.getRuta() + endpoint.getRuta();
+                    String url = "http://" + s.getProvajder().getHost() + s.getRuta() + endpoint.getRuta();
                     System.out.println("URL JE " + url);
-                    HttpPost httpPost = new HttpPost(url);
-                    try {
-                        response = client.execute(httpPost);
-                        String result = EntityUtils.toString(response.getEntity());
-                        System.out.println("RESULT JE " + result);
-                        Map<String, String> mapa = objectMapper.readValue(result, Map.class);//ovo je visak treba da postoji samo ako je neka mapa ili json neka kolekcija, kao je samo boolean ili slicno onda samo String result
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if(endpoint.getZahtev().equals("POST"))
+                    {
+                        HttpPost httpPost = new HttpPost(url);
+                        try {
+                            if (i > 0) {
+                                String json = o.toString();
+                                StringEntity entity = new StringEntity(json);
+                                httpPost.setEntity(entity);
+                                httpPost.setHeader("Accept", "application/json");
+                                httpPost.setHeader("Content-type", "application/json");
+                            }
+                            response = client.execute(httpPost);
+                            context.changeState(s.getProvajder().getHost() + s.getRuta());// da bi testirali zakomentarisati
+                            String result = EntityUtils.toString(response.getEntity());
+                            if (endpoint.getOutput().equals("json")) {
+                                Map<String, String> mapa = objectMapper.readValue(result, Map.class);
+                                o = mapa;
+                            } else {
+                                o = result;
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }else{
+                        HttpGet httpGet = new HttpGet(url);
+                        if(i>0){
+                            String json = o.toString();
+                            httpGet.setHeader("podaci",json);
+                            httpGet.setHeader("Accept", "application/json");
+                            httpGet.setHeader("Content-type", "application/json");
+                        }
+                        try {
+                            response = client.execute(httpGet);
+                            context.changeState(s.getProvajder().getHost() + s.getRuta());// da bi testirali zakomentarisati
+                            String result = EntityUtils.toString(response.getEntity());
+                            if (endpoint.getOutput().equals("json")) {
+                                Map<String, String> mapa = objectMapper.readValue(result, Map.class);
+                                o = mapa;
+                            } else {
+                                o = result;
+                            }
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
+                    i++;
                 }
             }
+            try {
+                client.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return new ResponseEntity<Object>(o, HttpStatus.OK);
         }
         else {
             //sastavim http zahtev za provajdera, return je response od provajdera
@@ -100,11 +148,14 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
                     httpPost.setHeader("Accept", "application/json");
                     httpPost.setHeader("Content-type", "application/json");
                     CloseableHttpResponse response = client.execute(httpPost);
-                    BufferedReader br = new BufferedReader(
-                            new InputStreamReader((response.getEntity().getContent())));
-                    String output;
-                    output = br.readLine();
-                    Object o = Boolean.parseBoolean(output);
+                    String result = EntityUtils.toString(response.getEntity());
+                    Object o = null;
+                    if(endpoint.getOutput().equals("json")){
+                        Map<String, String> mapa = objectMapper.readValue(result, Map.class);
+                        o = mapa;
+                    }else{
+                        o = result;
+                    }
                     client.close();
                     return new ResponseEntity<Object>(o, HttpStatus.OK);
                 } catch (UnsupportedEncodingException e) {
@@ -126,9 +177,13 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
                     httpGet.setHeader("Content-type", "application/json");
                     CloseableHttpResponse response = client.execute(httpGet);
                     String result = EntityUtils.toString(response.getEntity());
-                    Map<String, String> mapa = objectMapper.readValue(result, Map.class);
-                    System.out.println("MAPA U GETU " + mapa.toString());
-                    Object o = mapa;
+                    Object o = null;
+                    if(endpoint.getOutput().equals("json")){
+                        Map<String, String> mapa = objectMapper.readValue(result, Map.class);
+                        o = mapa;
+                    }else{
+                        o = result;
+                    }
                     client.close();
                     return new ResponseEntity<Object>(o, HttpStatus.OK);
                 } catch (UnsupportedEncodingException e) {

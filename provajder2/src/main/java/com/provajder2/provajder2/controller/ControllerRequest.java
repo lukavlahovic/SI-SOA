@@ -36,8 +36,8 @@ public class ControllerRequest {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/prosek/avg")
-    public ResponseEntity<Boolean> prosek(){
-        return new ResponseEntity<Boolean>(services.prosek(), HttpStatus.OK);
+    public ResponseEntity<Boolean> prosek(@RequestBody String test){
+        return new ResponseEntity<Boolean>(services.prosek(test), HttpStatus.OK);
     }
 
 }
