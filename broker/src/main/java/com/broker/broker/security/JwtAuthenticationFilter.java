@@ -10,6 +10,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -61,10 +62,22 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             FilterChain chain,
                                             Authentication auth) throws IOException, ServletException {
 
+        String roles ="";
+        int i = 0;
+        int len = ((User)auth.getPrincipal()).getAuthorities().size();
+        for(GrantedAuthority g: ((User)auth.getPrincipal()).getAuthorities())
+        {
+            if(i == len-1)
+            {
+                roles += g.getAuthority();
+                break;
+            }
+            roles += g.getAuthority() + ",";
+        }
 
         String token = JWT.create()
                 .withSubject(((User)auth.getPrincipal()).getUsername())
-                .withClaim("test1", "test2")
+                .withClaim("roles", roles )
                 .withExpiresAt(new Date(System.currentTimeMillis() + Constants.EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(Constants.SECRET_KEY.getBytes()));
 

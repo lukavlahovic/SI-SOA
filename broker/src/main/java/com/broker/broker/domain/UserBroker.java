@@ -29,4 +29,7 @@ public class UserBroker  {
     )
     private List<Role> roles = new ArrayList<>();
 
+    @OneToOne(mappedBy = "userBroker")
+    private Log log;
+
 }

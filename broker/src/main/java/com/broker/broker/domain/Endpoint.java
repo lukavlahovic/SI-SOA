@@ -33,4 +33,14 @@ public class Endpoint {
     @OneToMany(mappedBy = "endpoint")
     private List<Endpoint_access> listaEndpointaPristupa = new ArrayList<>();
 
+    @OneToOne(mappedBy = "endpoint")
+    private Log log;
+
+    @ManyToMany
+    @JoinTable(
+            name = "endpoint_role",
+            joinColumns = @JoinColumn(name = "endpoint_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
+    private List<Role> listaRolova = new ArrayList<>();
+
 }

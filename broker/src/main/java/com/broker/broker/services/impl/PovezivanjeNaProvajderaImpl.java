@@ -1,15 +1,10 @@
 package com.broker.broker.services.impl;
 
-import com.broker.broker.domain.Endpoint;
-import com.broker.broker.domain.Provajder;
-import com.broker.broker.domain.Servis;
-import com.broker.broker.domain.SlozenServis;
+import com.broker.broker.domain.*;
 import com.broker.broker.mappers.EndpointMapper;
 import com.broker.broker.model.Podaci;
-import com.broker.broker.repository.EndpointRepository;
-import com.broker.broker.repository.ProvajderRepository;
-import com.broker.broker.repository.ServisRepository;
-import com.broker.broker.repository.SlozenRepository;
+import com.broker.broker.repository.*;
+import com.broker.broker.services.LoggerServis;
 import com.broker.broker.services.PovezivanjeNaProvajdera;
 import com.broker.broker.state.Context;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -42,22 +37,29 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
     private ServisRepository servisRepository;
     private SlozenRepository slozenRepository;
     private Context context;
+    private LoggerServis loggerServis;
+    private UserRepository userRepository;
 
     public PovezivanjeNaProvajderaImpl(EndpointMapper endpointMapper, EndpointRepository endpointRepository,ProvajderRepository provajderRepository,
-                                       ServisRepository servisRepository,SlozenRepository slozenRepository){
+                                       ServisRepository servisRepository,SlozenRepository slozenRepository,
+                                       LoggerServis loggerServis,UserRepository userRepository){
         this.endpointMapper = endpointMapper;
         this.endpointRepository = endpointRepository;
         this.provajderRepository = provajderRepository;
         this.servisRepository = servisRepository;
         this.slozenRepository = slozenRepository;
         this.context = new Context(servisRepository);
+        this.loggerServis = loggerServis;
+        this.userRepository = userRepository;
     }
 
     @Override
     public ResponseEntity<Object> pozoviProvajdera(String username, String servis, String ruta, Map<String,Object> map) {
         Provajder provajder = provajderRepository.findByUsername(username);
+        UserBroker userBroker = userRepository.findByUsername(username);
         //provera da li je slozen servis
         SlozenServis slozenServis = slozenRepository.findByNameAndProvajderS(servis,provajder);
+
         if(slozenServis!=null){
             CloseableHttpClient client = HttpClients.createDefault();
             CloseableHttpResponse response;
@@ -71,53 +73,58 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
                     tip = s.getTip();
                     Endpoint endpoint = s.getListaEndpointa().get(0);
                     String url = "http://" + s.getProvajder().getHost() + s.getRuta() + endpoint.getRuta();
-                    System.out.println("URL JE " + url);
-                    if(endpoint.getZahtev().equals("POST"))
+
+                    if(loggerServis.upisi(userBroker,userBroker.getRoles(),endpoint))
                     {
-                        HttpPost httpPost = new HttpPost(url);
-                        try {
-                            if (i > 0) {
+                        System.out.println("URL JE " + url);
+                        if(endpoint.getZahtev().equals("POST"))
+                        {
+
+                            HttpPost httpPost = new HttpPost(url);
+                            try {
+                                if (i > 0) {
+                                    String json = o.toString();
+                                    StringEntity entity = new StringEntity(json);
+                                    httpPost.setEntity(entity);
+                                    httpPost.setHeader("Accept", "application/json");
+                                    httpPost.setHeader("Content-type", "application/json");
+                                }
+                                response = client.execute(httpPost);
+                                context.changeState(s.getProvajder().getHost() + s.getRuta());// da bi testirali zakomentarisati
+                                String result = EntityUtils.toString(response.getEntity());
+                                if (endpoint.getOutput().equals("json")) {
+                                    Map<String, String> mapa = objectMapper.readValue(result, Map.class);
+                                    o = mapa;
+                                } else {
+                                    o = result;
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }else{
+                            HttpGet httpGet = new HttpGet(url);
+                            if(i>0){
                                 String json = o.toString();
-                                StringEntity entity = new StringEntity(json);
-                                httpPost.setEntity(entity);
-                                httpPost.setHeader("Accept", "application/json");
-                                httpPost.setHeader("Content-type", "application/json");
+                                httpGet.setHeader("podaci",json);
+                                httpGet.setHeader("Accept", "application/json");
+                                httpGet.setHeader("Content-type", "application/json");
                             }
-                            response = client.execute(httpPost);
-                            context.changeState(s.getProvajder().getHost() + s.getRuta());// da bi testirali zakomentarisati
-                            String result = EntityUtils.toString(response.getEntity());
-                            if (endpoint.getOutput().equals("json")) {
-                                Map<String, String> mapa = objectMapper.readValue(result, Map.class);
-                                o = mapa;
-                            } else {
-                                o = result;
+                            try {
+                                response = client.execute(httpGet);
+                                context.changeState(s.getProvajder().getHost() + s.getRuta());// da bi testirali zakomentarisati
+                                String result = EntityUtils.toString(response.getEntity());
+                                if (endpoint.getOutput().equals("json")) {
+                                    Map<String, String> mapa = objectMapper.readValue(result, Map.class);
+                                    o = mapa;
+                                } else {
+                                    o = result;
+                                }
+                            } catch (IOException e) {
+                                e.printStackTrace();
                             }
-                        } catch (IOException e) {
-                            e.printStackTrace();
                         }
-                    }else{
-                        HttpGet httpGet = new HttpGet(url);
-                        if(i>0){
-                            String json = o.toString();
-                            httpGet.setHeader("podaci",json);
-                            httpGet.setHeader("Accept", "application/json");
-                            httpGet.setHeader("Content-type", "application/json");
-                        }
-                        try {
-                            response = client.execute(httpGet);
-                            context.changeState(s.getProvajder().getHost() + s.getRuta());// da bi testirali zakomentarisati
-                            String result = EntityUtils.toString(response.getEntity());
-                            if (endpoint.getOutput().equals("json")) {
-                                Map<String, String> mapa = objectMapper.readValue(result, Map.class);
-                                o = mapa;
-                            } else {
-                                o = result;
-                            }
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
+                        i++;
                     }
-                    i++;
                 }
             }
             try {
@@ -132,66 +139,68 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
             String url = "http://" + provajder.getHost() + servisRepository.findByNameAndProvajder(servis, provajder).getRuta();//localhost:8081 + /teski
             Endpoint endpoint = endpointRepository.findByRuta("/" + ruta);
             url += endpoint.getRuta(); //localhost:8081/api/teski + /add
-            CloseableHttpClient client = HttpClients.createDefault();
-            if (endpoint.getZahtev().equals("POST")) {
-                HttpPost httpPost = new HttpPost(url);
-                ObjectMapper objectMapper = new ObjectMapper();
-                String json = null;
-                try {
-                    json = objectMapper.writeValueAsString(map);
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    StringEntity entity = new StringEntity(json);
-                    httpPost.setEntity(entity);
-                    httpPost.setHeader("Accept", "application/json");
-                    httpPost.setHeader("Content-type", "application/json");
-                    CloseableHttpResponse response = client.execute(httpPost);
-                    String result = EntityUtils.toString(response.getEntity());
-                    Object o = null;
-                    if(endpoint.getOutput().equals("json")){
-                        Map<String, String> mapa = objectMapper.readValue(result, Map.class);
-                        o = mapa;
-                    }else{
-                        o = result;
+            if(loggerServis.upisi(userBroker,userBroker.getRoles(),endpoint)) {
+                CloseableHttpClient client = HttpClients.createDefault();
+                if (endpoint.getZahtev().equals("POST")) {
+                    HttpPost httpPost = new HttpPost(url);
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String json = null;
+                    try {
+                        json = objectMapper.writeValueAsString(map);
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
                     }
-                    client.close();
-                    return new ResponseEntity<Object>(o, HttpStatus.OK);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                } catch (ClientProtocolException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-            if (endpoint.getZahtev().equals("GET")) {
-                System.out.println("MAPA JE " + map.toString());
-                HttpGet httpGet = new HttpGet(url);
-                ObjectMapper objectMapper = new ObjectMapper();
-                String json = (String) map.get("podaci");
-                try {
-                    httpGet.setHeader("podaci", json);
-                    httpGet.setHeader("Accept", "application/json");
-                    httpGet.setHeader("Content-type", "application/json");
-                    CloseableHttpResponse response = client.execute(httpGet);
-                    String result = EntityUtils.toString(response.getEntity());
-                    Object o = null;
-                    if(endpoint.getOutput().equals("json")){
-                        Map<String, String> mapa = objectMapper.readValue(result, Map.class);
-                        o = mapa;
-                    }else{
-                        o = result;
+                    try {
+                        StringEntity entity = new StringEntity(json);
+                        httpPost.setEntity(entity);
+                        httpPost.setHeader("Accept", "application/json");
+                        httpPost.setHeader("Content-type", "application/json");
+                        CloseableHttpResponse response = client.execute(httpPost);
+                        String result = EntityUtils.toString(response.getEntity());
+                        Object o = null;
+                        if (endpoint.getOutput().equals("json")) {
+                            Map<String, String> mapa = objectMapper.readValue(result, Map.class);
+                            o = mapa;
+                        } else {
+                            o = result;
+                        }
+                        client.close();
+                        return new ResponseEntity<Object>(o, HttpStatus.OK);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    } catch (ClientProtocolException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    client.close();
-                    return new ResponseEntity<Object>(o, HttpStatus.OK);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                } catch (ClientProtocolException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                }
+                if (endpoint.getZahtev().equals("GET")) {
+                    System.out.println("MAPA JE " + map.toString());
+                    HttpGet httpGet = new HttpGet(url);
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String json = (String) map.get("podaci");
+                    try {
+                        httpGet.setHeader("podaci", json);
+                        httpGet.setHeader("Accept", "application/json");
+                        httpGet.setHeader("Content-type", "application/json");
+                        CloseableHttpResponse response = client.execute(httpGet);
+                        String result = EntityUtils.toString(response.getEntity());
+                        Object o = null;
+                        if (endpoint.getOutput().equals("json")) {
+                            Map<String, String> mapa = objectMapper.readValue(result, Map.class);
+                            o = mapa;
+                        } else {
+                            o = result;
+                        }
+                        client.close();
+                        return new ResponseEntity<Object>(o, HttpStatus.OK);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    } catch (ClientProtocolException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
