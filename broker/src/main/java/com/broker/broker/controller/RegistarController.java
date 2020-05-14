@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -40,14 +41,14 @@ public class RegistarController {
     @PreAuthorize("hasRole('USER')")
     @RequestMapping(method = RequestMethod.POST, value = {"/{provajder}/{servis}/{endpoint}","/{provajder}/{servis}/"})
     public ResponseEntity<Object> pozoviProvajdera(@PathVariable String provajder, @PathVariable String servis, @PathVariable(required = false) String endpoint,
-                                                   @RequestBody(required = false) Map<String,Object> map){
-        return povezivanjeNaProvajdera.pozoviProvajdera(provajder,servis,endpoint,map);
+                                                   @RequestBody(required = false) Map<String,Object> map, @AuthenticationPrincipal String account){
+        return povezivanjeNaProvajdera.pozoviProvajdera(provajder,servis,endpoint,map, account);
     }
     @PreAuthorize("hasRole('USER')")
     @RequestMapping(method = RequestMethod.GET, value = "/{provajder}/{servis}/{endpoint}")
-    public ResponseEntity<Object> pozoviProvajdera1(@PathVariable String provajder, @PathVariable String servis, @PathVariable String endpoint){
+    public ResponseEntity<Object> pozoviProvajdera1(@PathVariable String provajder, @PathVariable String servis, @PathVariable String endpoint, @AuthenticationPrincipal String account){
         Map<String,Object> map = getHeadersInfo();
-        return povezivanjeNaProvajdera.pozoviProvajdera(provajder,servis,endpoint,map);
+        return povezivanjeNaProvajdera.pozoviProvajdera(provajder,servis,endpoint,map,account);
     }
 
 

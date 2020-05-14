@@ -1,5 +1,10 @@
 package com.broker.broker.filter;
 
+import com.broker.broker.domain.Endpoint;
+import com.broker.broker.domain.UserBroker;
+
+import java.util.Map;
+
 public class Filter {
 
     private CriteriaRole criteriaRole;
@@ -9,12 +14,12 @@ public class Filter {
         criteriaRole = new CriteriaRole();
     }
 
-    public String povratnaVrednost(String json)
+    public Map<String,String> filterByRole(Map<String,String> map, Endpoint endpoint, UserBroker userBroker)
     {
-        return criteriaRole.meetCriteria(json);
+        return criteriaRole.meetCriteria(map,endpoint,userBroker);
     }
 
-
+/*
      {
        output:[
        {String: ime},
@@ -29,7 +34,7 @@ public class Filter {
        {ime,prezime,jmbg,adresa}
        ]
      }
-
+*/
 
 
 }

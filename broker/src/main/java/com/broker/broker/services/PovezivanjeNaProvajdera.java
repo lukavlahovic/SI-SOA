@@ -6,5 +6,5 @@ import org.springframework.http.ResponseEntity;
 import java.util.Map;
 
 public interface PovezivanjeNaProvajdera {
-    ResponseEntity<Object> pozoviProvajdera(String provajder, String servis, String endpoint, Map<String,Object> map);
+    ResponseEntity<Object> pozoviProvajdera(String provajder, String servis, String endpoint, Map<String,Object> map,String account);
 }

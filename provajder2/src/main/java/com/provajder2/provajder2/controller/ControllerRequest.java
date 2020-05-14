@@ -45,7 +45,7 @@ public class ControllerRequest {
         return new ResponseEntity<Boolean>(services.prosek(test), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/student")
+    @RequestMapping(method = RequestMethod.POST, value = "/service/student")
     public ResponseEntity<Map<String,Object>> prosek(){
         return new ResponseEntity<Map<String,Object>>(studentServis.prikazStudenta(), HttpStatus.OK);
     }
