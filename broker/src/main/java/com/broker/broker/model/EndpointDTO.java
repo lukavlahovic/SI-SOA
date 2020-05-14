@@ -10,5 +10,6 @@ public class EndpointDTO {
     private String zahtev;
     private String input;
     private String output;
+    private String filter;
 
 }

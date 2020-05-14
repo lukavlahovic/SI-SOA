@@ -139,7 +139,7 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
             String url = "http://" + provajder.getHost() + servisRepository.findByNameAndProvajder(servis, provajder).getRuta();//localhost:8081 + /teski
             Endpoint endpoint = endpointRepository.findByRuta("/" + ruta);
             url += endpoint.getRuta(); //localhost:8081/api/teski + /add
-            if(loggerServis.upisi(userBroker,userBroker.getRoles(),endpoint)) {
+//            if(loggerServis.upisi(userBroker,userBroker.getRoles(),endpoint)) {
                 CloseableHttpClient client = HttpClients.createDefault();
                 if (endpoint.getZahtev().equals("POST")) {
                     HttpPost httpPost = new HttpPost(url);
@@ -157,6 +157,7 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
                         httpPost.setHeader("Content-type", "application/json");
                         CloseableHttpResponse response = client.execute(httpPost);
                         String result = EntityUtils.toString(response.getEntity());
+                        System.out.println(result);
                         Object o = null;
                         if (endpoint.getOutput().equals("json")) {
                             Map<String, String> mapa = objectMapper.readValue(result, Map.class);
@@ -185,6 +186,7 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
                         httpGet.setHeader("Content-type", "application/json");
                         CloseableHttpResponse response = client.execute(httpGet);
                         String result = EntityUtils.toString(response.getEntity());
+                        System.out.println(result);
                         Object o = null;
                         if (endpoint.getOutput().equals("json")) {
                             Map<String, String> mapa = objectMapper.readValue(result, Map.class);
@@ -202,7 +204,7 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
                         e.printStackTrace();
                     }
                 }
-            }
+//            }
         }
 
         return null;

@@ -43,4 +43,7 @@ public class Endpoint {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> listaRolova = new ArrayList<>();
 
+    @Column
+    private String filter;
+
 }
