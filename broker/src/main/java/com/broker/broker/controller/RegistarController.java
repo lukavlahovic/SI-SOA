@@ -38,14 +38,14 @@ public class RegistarController {
         return new ResponseEntity<Boolean>(registarService.registruj(provajderDTO,role,host), HttpStatus.OK);
     }
     //localhost:8080/provajder1/teski/add               localhost:8080/provajder1/teski/delete
-    @PreAuthorize("hasRole('USER')")
+    //@PreAuthorize("hasRole('USER')")
     @RequestMapping(method = RequestMethod.POST, value = {"/{provajder}/{servis}/{endpoint}","/{provajder}/{servis}/"})
     public ResponseEntity<Object> pozoviProvajdera(@PathVariable String provajder, @PathVariable String servis, @PathVariable(required = false) String endpoint,
                                                    @RequestBody(required = false) Map<String,Object> map, @AuthenticationPrincipal String account){
         return povezivanjeNaProvajdera.pozoviProvajdera(provajder,servis,endpoint,map, account);
     }
-    @PreAuthorize("hasRole('USER')")
-    @RequestMapping(method = RequestMethod.GET, value = "/{provajder}/{servis}/{endpoint}")
+    //@PreAuthorize("hasRole('USER')")
+    @RequestMapping(method = RequestMethod.GET, value = {"/{provajder}/{servis}/{endpoint}","/{provajder}/{servis}/"})
     public ResponseEntity<Object> pozoviProvajdera1(@PathVariable String provajder, @PathVariable String servis, @PathVariable String endpoint, @AuthenticationPrincipal String account){
         Map<String,Object> map = getHeadersInfo();
         return povezivanjeNaProvajdera.pozoviProvajdera(provajder,servis,endpoint,map,account);

@@ -138,77 +138,88 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
         }
         else {
             //sastavim http zahtev za provajdera, return je response od provajdera
-            System.out.println("Provajder "+provajder.getHost());
-            System.out.println("Servis "+servis);
+            System.out.println("USAO ZA KORISNIKA " + userBroker.getUsername());
             String url = "http://" + provajder.getHost() + servisRepository.findByNameAndProvajder(servis, provajder).getRuta();//localhost:8081 + /teski
             Endpoint endpoint = endpointRepository.findByRuta("/" + ruta);
             url += endpoint.getRuta(); //localhost:8081/api/teski + /add
-//            if(loggerServis.upisi(userBroker,userBroker.getRoles(),endpoint)) {
-            CloseableHttpClient client = HttpClients.createDefault();
-            if (endpoint.getZahtev().equals("POST")) {
-                HttpPost httpPost = new HttpPost(url);
-                ObjectMapper objectMapper = new ObjectMapper();
-                String json = null;
-                try {
-                    json = objectMapper.writeValueAsString(map);
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    StringEntity entity = new StringEntity(json);
-                    httpPost.setEntity(entity);
-                    httpPost.setHeader("Accept", "application/json");
-                    httpPost.setHeader("Content-type", "application/json");
-                    CloseableHttpResponse response = client.execute(httpPost);
-                    String result = EntityUtils.toString(response.getEntity());
-                    System.out.println(result);
-                    Object o = null;
-                    if (endpoint.getOutput().equals("json")) {
-                        Map<String, String> mapa = objectMapper.readValue(result, Map.class);
-                        o = filter.filterByRole(mapa,endpoint,userBroker);
-                    } else {
-                        o = result;
+            if(loggerServis.upisi(userBroker,userBroker.getRoles(),endpoint)) {
+                CloseableHttpClient client = HttpClients.createDefault();
+                if (endpoint.getZahtev().equals("POST")) {
+                    if(endpoint.getBaza()!=null){
+                        String[] s = endpoint.getBaza().split(";");
+                        String baza = s[0] + ";" + s[1];
+                        String urlTransformator = s[2];
+                        HttpPost httpPost = new HttpPost(urlTransformator);
+                        httpPost.setHeader("baza",baza);
+                        try {
+                            CloseableHttpResponse response = client.execute(httpPost);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
-                    client.close();
-                    return new ResponseEntity<Object>(o, HttpStatus.OK);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                } catch (ClientProtocolException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    HttpPost httpPost = new HttpPost(url);
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String json = null;
+                    try {
+                        json = objectMapper.writeValueAsString(map);
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        StringEntity entity = new StringEntity(json);
+                        httpPost.setEntity(entity);
+                        httpPost.setHeader("Accept", "application/json");
+                        httpPost.setHeader("Content-type", "application/json");
+                        CloseableHttpResponse response = client.execute(httpPost);
+                        String result = EntityUtils.toString(response.getEntity());
+                        System.out.println(result);
+                        Object o = null;
+                        if (endpoint.getOutput().equals("json")) {
+                            Map<String, String> mapa = objectMapper.readValue(result, Map.class);
+                            o = filter.filterByRole(mapa,endpoint,userBroker);
+                        } else {
+                            o = result;
+                        }
+                        client.close();
+                        return new ResponseEntity<Object>(o, HttpStatus.OK);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    } catch (ClientProtocolException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                if (endpoint.getZahtev().equals("GET")) {
+                    System.out.println("MAPA JE " + map.toString());
+                    HttpGet httpGet = new HttpGet(url);
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String json = (String) map.get("podaci");
+                    try {
+                        httpGet.setHeader("podaci", json);
+                        httpGet.setHeader("Accept", "application/json");
+                        httpGet.setHeader("Content-type", "application/json");
+                        CloseableHttpResponse response = client.execute(httpGet);
+                        String result = EntityUtils.toString(response.getEntity());
+                        System.out.println(result);
+                        Object o = null;
+                        if (endpoint.getOutput().equals("json")) {
+                            Map<String, String> mapa = objectMapper.readValue(result, Map.class);
+                            o = filter.filterByRole(mapa,endpoint,userBroker);
+                        } else {
+                            o = result;
+                        }
+                        client.close();
+                        return new ResponseEntity<Object>(o, HttpStatus.OK);
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    } catch (ClientProtocolException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-            if (endpoint.getZahtev().equals("GET")) {
-                System.out.println("MAPA JE " + map.toString());
-                HttpGet httpGet = new HttpGet(url);
-                ObjectMapper objectMapper = new ObjectMapper();
-                String json = (String) map.get("podaci");
-                try {
-                    httpGet.setHeader("podaci", json);
-                    httpGet.setHeader("Accept", "application/json");
-                    httpGet.setHeader("Content-type", "application/json");
-                    CloseableHttpResponse response = client.execute(httpGet);
-                    String result = EntityUtils.toString(response.getEntity());
-                    System.out.println(result);
-                    Object o = null;
-                    if (endpoint.getOutput().equals("json")) {
-                        Map<String, String> mapa = objectMapper.readValue(result, Map.class);
-                        o = filter.filterByRole(mapa,endpoint,userBroker);
-                    } else {
-                        o = result;
-                    }
-                    client.close();
-                    return new ResponseEntity<Object>(o, HttpStatus.OK);
-                } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
-                } catch (ClientProtocolException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-//            }
         }
 
         return null;

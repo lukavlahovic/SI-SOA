@@ -1,7 +1,9 @@
 package com.provajder2.provajder2.controller;
 
+import com.provajder2.provajder2.services.MongoService;
 import com.provajder2.provajder2.services.Services;
 import com.provajder2.provajder2.services.StudentServis;
+import com.provajder2.provajder2.services.TransformatorService;
 import com.provajder2.provajder2.services.impl.ServicesImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,13 +22,16 @@ public class ControllerRequest {
 
     private Services services;
     private StudentServis studentServis;
-
+    private MongoService mongoService;
+    private TransformatorService transformatorService;
 
     @Autowired
-    public ControllerRequest(Services services,StudentServis studentServis){
+    public ControllerRequest(Services services,StudentServis studentServis,MongoService mongoService, TransformatorService transformatorService){
 
         this.services = services;
         this.studentServis = studentServis;
+        this.mongoService = mongoService;
+        this.transformatorService = transformatorService;
     }
 
 
@@ -50,4 +55,13 @@ public class ControllerRequest {
         return new ResponseEntity<Map<String,Object>>(studentServis.prikazStudenta(), HttpStatus.OK);
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/service/mongo")
+    public ResponseEntity<Boolean> mongoDB(){
+        return new ResponseEntity<Boolean>(mongoService.test(), HttpStatus.OK);
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/service/transform")
+    public ResponseEntity<Boolean> transform(@RequestHeader("baza") String baza){
+        return new ResponseEntity<Boolean>(transformatorService.transform(baza), HttpStatus.OK);
+    }
 }

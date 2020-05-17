@@ -27,6 +27,9 @@ public class Endpoint {
     @Column
     private String output;
 
+    @Column
+    private String baza;
+
     @ManyToOne
     private Servis servis;
 
