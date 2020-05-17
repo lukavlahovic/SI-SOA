@@ -46,10 +46,12 @@ public class TransformatorServiceImpl implements TransformatorService {
                 List results = bootstrap.getTemplate().queryForList(command);
                 for(Object result:results){
                     Map map = (Map) result;
+                    BasicDBObject document = new BasicDBObject();
                     map.forEach((key, value) -> {
-                        BasicDBObject document = new BasicDBObject((String)key,value);
-                        collection.insertOne(document);
+                        document.append((String)key,value);
+
                     });
+                    collection.insertOne(document);
                 }
             }
             else{
