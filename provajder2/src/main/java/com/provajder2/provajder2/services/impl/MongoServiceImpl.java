@@ -1,65 +1,48 @@
 package com.provajder2.provajder2.services.impl;
 
-import com.mongodb.MongoClient;
+import com.mongodb.BasicDBObject;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.provajder2.provajder2.mongoConfig.MongoConfiguracija;
 import com.provajder2.provajder2.services.MongoService;
-import org.apache.http.Header;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+import org.bson.Document;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 
 @Service
 public class MongoServiceImpl implements MongoService {
     @Override
-    public Boolean test() {
-        //login
-        /*CloseableHttpClient client1 = HttpClients.createDefault();
-        HttpPost httpPost1 = new HttpPost("http://localhost:8080/login");
-        String json = "{\"username\":\"provajder2\",\"password\":\"123\"}";
-        CloseableHttpResponse response1 = null;
-        try {
-            StringEntity entity = new StringEntity(json);
-            httpPost1.setEntity(entity);
-            response1 = client1.execute(httpPost1);
-            client1.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String token = "";
-        for (Header header: response1.getAllHeaders()) {
-            if (header.getName().equalsIgnoreCase("authorization")) {
-                token = header.getValue();
-            }
-        }
-        System.out.println(token);
-
-
-        CloseableHttpClient client = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost("http://localhost:8080/provajder2/service/transform");
-        httpPost.setHeader("Accept", "application/json");
-        httpPost.setHeader("Content-type", "application/json");
-        httpPost.setHeader("Authorization", token);
-        CloseableHttpResponse response = null;
-        try {
-            response = client.execute(httpPost);
-            String result = EntityUtils.toString(response.getEntity());
-            System.out.println("ODGOVOR TRANSFORMATORA " + result);
-            client.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        MongoClient mongoClient = MongoConfiguracija.getConnection();
-        for(String s:mongoClient.listDatabaseNames())
-            mongoClient.getDatabase(s);
-        mongoClient.close();*/
+    public String test() {
         System.out.println("RADI MONGO");
-        return true;
+        Map<String, ArrayList<String>> mapa = new HashMap<>();
+        mapa.put("ULO_OZNAKA", new ArrayList<>());
+        mapa.put("ULO_NAZIV", new ArrayList<>());
+        MongoDatabase db = MongoConfiguracija.getConnection().getDatabase("tim_402_1_mongo_si2019");
+        MongoCollection<Document> collection = db.getCollection("role", Document.class);
+        /*FindIterable<BasicDBObject> find = collection.find();
+
+        for(BasicDBObject f : find){
+            mapa.get("ULO_OZNAKA").add(f.getString("ULO_OZNAKA"));
+            mapa.get("ULO_NAZIV").add(f.getString("ULO_NAZIV"));
+        }*/
+        MongoCursor<Document> cursor = collection.find().iterator();
+        String json = "";
+        try {
+            while (cursor.hasNext()) {
+                json += cursor.next().toJson();
+                if(cursor.hasNext())
+                    json += ",";
+            }
+        } finally {
+            cursor.close();
+        }
+        System.out.println("JSON JE " + json);
+        return json;
     }
 }

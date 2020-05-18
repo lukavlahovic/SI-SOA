@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Map;
 
 @Controller
@@ -56,8 +57,8 @@ public class ControllerRequest {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/service/mongo")
-    public ResponseEntity<Boolean> mongoDB(){
-        return new ResponseEntity<Boolean>(mongoService.test(), HttpStatus.OK);
+    public ResponseEntity<String> mongoDB(){
+        return new ResponseEntity<String>(mongoService.test(), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/service/transform")

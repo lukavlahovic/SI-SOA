@@ -7,12 +7,9 @@ import com.provajder2.provajder2.bootstrap.Bootstrap;
 import com.provajder2.provajder2.mongoConfig.MongoConfiguracija;
 import com.provajder2.provajder2.services.TransformatorService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Basic;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -38,18 +35,16 @@ public class TransformatorServiceImpl implements TransformatorService {
             String tabela = tabelaPolja[0];
             String polja = tabelaPolja[1];
             if(!db.listCollectionNames()
-                    .into(new ArrayList<String>()).contains(tabela)){
+                    .into(new ArrayList<String>()).contains(tabela) || slozen){
                 System.out.println("TRANSFORMACIJA " + polja);
                 MongoCollection<BasicDBObject> collection = db.getCollection(tabela, BasicDBObject.class);
                 String command = "SELECT " + polja + " FROM " + tabela.toUpperCase();
-
                 List results = bootstrap.getTemplate().queryForList(command);
                 for(Object result:results){
                     Map map = (Map) result;
                     BasicDBObject document = new BasicDBObject();
                     map.forEach((key, value) -> {
                         document.append((String)key,value);
-
                     });
                     collection.insertOne(document);
                 }
