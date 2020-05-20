@@ -49,4 +49,7 @@ public class Endpoint {
     @Column
     private String filter;
 
+    @Column
+    private String transformatorZa;
+
 }

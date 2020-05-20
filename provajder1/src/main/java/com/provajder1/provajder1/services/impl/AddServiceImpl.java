@@ -33,7 +33,7 @@ public class AddServiceImpl implements AddService {
 //        bootstrap.getTemplate().execute(command);
 //        return true;
 //    }
-    public boolean addTK(AddDTO addDTO) {
+    public String addTK(AddDTO addDTO) {
         String command = "INSERT INTO `" + addDTO.getEntitet() + "` (`"; //ULO_OZNAKA`,`ULO_NAZIV`) VALUES ('" + ulo_oznaka + "','" + ulo_naziv + "');";
         int i = 0;
         for(Map.Entry<String,String> entry : addDTO.getAtributi().entrySet())
@@ -60,11 +60,11 @@ public class AddServiceImpl implements AddService {
 
         //System.out.println("Entitet " + addDTO.getEntitet() + " atributi " + addDTO.getAtributi().toString());
         bootstrap.getTemplate().execute(command);
-        return true;
+        return command;
     }
 
     @Override
-    public boolean deleteTK(AddDTO addDTO) {
+    public String deleteTK(AddDTO addDTO) {
 
         String command = "DELETE FROM `" + addDTO.getEntitet() + "` WHERE "; //ULO_OZNAKA`,`ULO_NAZIV`) VALUES ('" + ulo_oznaka + "','" + ulo_naziv + "');";
 
@@ -76,7 +76,7 @@ public class AddServiceImpl implements AddService {
 
         }
         bootstrap.getTemplate().execute(command);
-        return true;
+        return command;
     }
 
     public Map<String,Object> selectTK(Map<String,String> podaci) {
@@ -103,7 +103,7 @@ public class AddServiceImpl implements AddService {
         return mapa;
     }
 
-    public boolean updateTK(UpdateDTO addDTO) {
+    public String updateTK(UpdateDTO addDTO) {
         String command = "UPDATE `" + addDTO.getEntitet() + "` SET `"; //ULO_OZNAKA`,`ULO_NAZIV`) VALUES ('" + ulo_oznaka + "','" + ulo_naziv + "');";
         int i = 0;
         for(Map.Entry<String,String> entry : addDTO.getAtributi().entrySet())
@@ -129,6 +129,6 @@ public class AddServiceImpl implements AddService {
 
         //System.out.println("Entitet " + addDTO.getEntitet() + " atributi " + addDTO.getAtributi().toString());
         bootstrap.getTemplate().execute(command);
-        return true;
+        return command;
     }
 }

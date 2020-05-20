@@ -18,8 +18,8 @@ public class Broker implements Repository {
     @Override
     public void add(Entitet entitet, String[] redKojiSeDodaje) throws SQLException {
         CloseableHttpClient client = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost("http://localhost:8080/provajder1/teski/add");//u provajderu http://localhost:8081/api/teski/add
-
+        //HttpPost httpPost = new HttpPost("http://localhost:8080/provajder1/teski/add");//u provajderu http://localhost:8081/api/teski/add
+        HttpPost httpPost = new HttpPost("http://localhost:8080/provajder2/addTransform/");//u provajderu http://localhost:8081/api/teski/add
         String json = "{ \"entitet\":\"" + entitet.getName() + "\",\"atributi\":{";
         for(int i=0;i<entitet.getAtribut().size();i++){
             json += "\"" + entitet.getAtribut().get(i) + "\":" + "\"" + redKojiSeDodaje[i] + "\"";
@@ -52,8 +52,8 @@ public class Broker implements Repository {
     @Override
     public void remove(Entitet entitet, String[] redKojiSeDodaje) throws SQLException {
         CloseableHttpClient client = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost("http://localhost:8080/provajder1/teski/delete");//u provajderu http://localhost:8081/api/teski/add
-
+        //HttpPost httpPost = new HttpPost("http://localhost:8080/provajder1/teski/delete");//u provajderu http://localhost:8081/api/teski/add
+        HttpPost httpPost = new HttpPost("http://localhost:8080/provajder2/deleteTransform/");
         String json = "{ \"entitet\":\"" + entitet.getName() + "\",\"atributi\":{";
 
         json += "\"" + entitet.getAtribut().get(0) + "\":" + "\"" + redKojiSeDodaje[0] + "\"";
@@ -87,8 +87,8 @@ public class Broker implements Repository {
     public void update(Entitet entitet, String[] redKojiSeDodaje, String staraVrednost) throws SQLException {
 
         CloseableHttpClient client = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost("http://localhost:8080/provajder1/teski/update");//u provajderu http://localhost:8081/api/teski/add
-
+        //HttpPost httpPost = new HttpPost("http://localhost:8080/provajder1/teski/update");//u provajderu http://localhost:8081/api/teski/add
+        HttpPost httpPost = new HttpPost("http://localhost:8080/provajder2/updateTransform/");
         String json = "{ \"entitet\":\"" + entitet.getName() + "\",\"atributi\":{";
         for(int i=0;i<entitet.getAtribut().size();i++){
             json += "\"" + entitet.getAtribut().get(i) + "\":" + "\"" + redKojiSeDodaje[i] + "\"";

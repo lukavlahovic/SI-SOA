@@ -7,8 +7,8 @@ import java.util.Map;
 
 public interface AddService {
     //boolean addTK(String ulo_oznaka, String ulo_naziv);
-    boolean addTK(AddDTO addDTO);
-    boolean deleteTK(AddDTO addDTO);
-    boolean updateTK(UpdateDTO updateDTO);
+    String addTK(AddDTO addDTO);
+    String deleteTK(AddDTO addDTO);
+    String updateTK(UpdateDTO updateDTO);
     Map<String,Object> selectTK(Map<String,String> map);
 }

@@ -24,6 +24,8 @@ public class CriteriaRole implements Criteria{
             List<String> roles = Arrays.asList(attributeWithRole.split(":")[1].split(","));
             for(Role roleUser:rolesUser){
                 if(roles.contains(roleUser.getName())){
+                    if(attribute.equals("ALL"))
+                        return map;
                     meetsCriteria.add(attribute);
                     break;
                 }

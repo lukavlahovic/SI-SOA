@@ -55,17 +55,17 @@ public class ControllerRequest {
         return new ResponseEntity<Map<String,Object>>(studentServis.prikazStudenta(), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/service/mongo")
+    @RequestMapping(method = RequestMethod.POST, value = "/mongo/mongo")
     public ResponseEntity<String> mongoDB(){
         return new ResponseEntity<String>(mongoService.test(), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/service/arango")
+    @RequestMapping(method = RequestMethod.POST, value = "/arango/arango")
     public ResponseEntity<String> arangoDB(){
         return new ResponseEntity<String>(arangoService.test(), HttpStatus.OK);}
 
-    @RequestMapping(method = RequestMethod.POST, value = "/service/transform")
-    public ResponseEntity<Boolean> transform(@RequestHeader("baza") String baza){
-        return new ResponseEntity<Boolean>(transformatorService.transform(baza), HttpStatus.OK);
+    @RequestMapping(method = RequestMethod.POST, value = "/transform/transform")
+    public ResponseEntity<Boolean> transform(@RequestHeader("baza") String baza, @RequestBody(required = false) String sqlCommand){
+        return new ResponseEntity<Boolean>(transformatorService.transform(baza,sqlCommand), HttpStatus.OK);
     }
 }

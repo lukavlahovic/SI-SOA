@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
@@ -57,14 +58,16 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
 
     @Override
     public ResponseEntity<Object> pozoviProvajdera(String username, String servis, String ruta, Map<String,Object> map, String account) {
+        System.out.println("USAO U FUNKCIJU");
         Provajder provajder = provajderRepository.findByUsername(username);
         UserBroker userBroker = userRepository.findByUsername(account);
         //provera da li je slozen servis
         SlozenServis slozenServis = slozenRepository.findByNameAndProvajderS(servis,provajder);
 
         if(slozenServis!=null){
+            System.out.println("USAO U SLOZENI");
             CloseableHttpClient client = HttpClients.createDefault();
-            CloseableHttpResponse response;
+            CloseableHttpResponse response = null;
             ObjectMapper objectMapper = new ObjectMapper();
             Object o = null;
             int i=0;
@@ -81,9 +84,15 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
                         System.out.println("URL JE " + url);
                         if(endpoint.getZahtev().equals("POST"))
                         {
-
                             HttpPost httpPost = new HttpPost(url);
                             try {
+                                if(i==0){
+                                    String json = objectMapper.writeValueAsString(map);
+                                    StringEntity entity = new StringEntity(json);
+                                    httpPost.setEntity(entity);
+                                    httpPost.setHeader("Accept", "application/json");
+                                    httpPost.setHeader("Content-type", "application/json");
+                                }
                                 if (i > 0) {
                                     String json = o.toString();
                                     StringEntity entity = new StringEntity(json);
@@ -91,7 +100,19 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
                                     httpPost.setHeader("Accept", "application/json");
                                     httpPost.setHeader("Content-type", "application/json");
                                 }
-                                response = client.execute(httpPost);
+                                if(endpoint.getTransformatorZa()!=null){
+                                    for(String id : endpoint.getTransformatorZa().split(",")){
+                                        Endpoint tmp = endpointRepository.findById(Long.parseLong(id)).get();
+                                        System.out.println("BAZA ENDPOINTA " + tmp.getBaza());
+                                        String[] s1 = tmp.getBaza().split(";");
+                                        String baza = s1[0] + ";" + s1[1];
+                                        httpPost.setHeader("baza",baza);
+                                        response = client.execute(httpPost);
+                                    }
+                                }
+                                else {
+                                    response = client.execute(httpPost);
+                                }
                                 context.changeState(s.getProvajder().getHost() + s.getRuta());// da bi testirali zakomentarisati
                                 String result = EntityUtils.toString(response.getEntity());
                                 if (endpoint.getOutput().equals("json")) {

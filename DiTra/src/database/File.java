@@ -146,7 +146,7 @@ public class File {
 //		rs0.close();
 
 		CloseableHttpClient client = HttpClients.createDefault();
-		HttpGet httpGet = new HttpGet("http://localhost:8080/provajder1/teski/select");
+		HttpGet httpGet = new HttpGet("http://localhost:8080/provajder1/teski1/select");
 		/*
 		try {
 			httpPost.addHeader("Authorization",response1.getHeader("Authorization"));

@@ -37,16 +37,16 @@ public class AddController {
 //        return new ResponseEntity<Boolean>(addService.addTK(ulo_oznaka,ulo_naziv), HttpStatus.OK);
 //    }
     @RequestMapping(method = RequestMethod.POST , value = "/add")
-    public ResponseEntity<Boolean> addRow(@RequestBody AddDTO addDTO){
-        return new ResponseEntity<Boolean>(addService.addTK(addDTO), HttpStatus.OK);
+    public ResponseEntity<String> addRow(@RequestBody AddDTO addDTO){
+        return new ResponseEntity<String>(addService.addTK(addDTO), HttpStatus.OK);
     }
     @RequestMapping(method = RequestMethod.POST , value = "/delete")
-    public ResponseEntity<Boolean> deleteRow(@RequestBody AddDTO addDTO){
-        return new ResponseEntity<Boolean>(addService.deleteTK(addDTO), HttpStatus.OK);
+    public ResponseEntity<String> deleteRow(@RequestBody AddDTO addDTO){
+        return new ResponseEntity<String>(addService.deleteTK(addDTO), HttpStatus.OK);
     }
     @RequestMapping(method = RequestMethod.POST , value = "/update")
-    public ResponseEntity<Boolean> updateRow(@RequestBody UpdateDTO addDTO){
-        return new ResponseEntity<Boolean>(addService.updateTK(addDTO), HttpStatus.OK);
+    public ResponseEntity<String> updateRow(@RequestBody UpdateDTO addDTO){
+        return new ResponseEntity<String>(addService.updateTK(addDTO), HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET , value = "/select")
