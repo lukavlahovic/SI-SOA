@@ -166,10 +166,13 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
             if(loggerServis.upisi(userBroker,userBroker.getRoles(),endpoint)) {
                 CloseableHttpClient client = HttpClients.createDefault();
                 if (endpoint.getZahtev().equals("POST")) {
+                    String query = null;
                     if(endpoint.getBaza()!=null){
+                        System.out.println("USAO ZA TRANSFORMATORA");
                         String[] s = endpoint.getBaza().split(";");
                         String baza = s[0] + ";" + s[1];
                         String urlTransformator = s[2];
+                        query = s[3];
                         HttpPost httpPost = new HttpPost(urlTransformator);
                         httpPost.setHeader("baza",baza);
                         try {
@@ -191,6 +194,9 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
                         httpPost.setEntity(entity);
                         httpPost.setHeader("Accept", "application/json");
                         httpPost.setHeader("Content-type", "application/json");
+                        if(query!=null) {
+                            httpPost.setHeader("query", query);
+                        }
                         CloseableHttpResponse response = client.execute(httpPost);
                         String result = EntityUtils.toString(response.getEntity());
                         System.out.println(result);

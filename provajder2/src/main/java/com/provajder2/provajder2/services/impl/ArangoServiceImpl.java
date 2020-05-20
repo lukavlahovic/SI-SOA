@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ArangoServiceImpl implements ArangoService {
     @Override
-    public String test() {
+    public String test(String query) {
 
         ArangoConfiguracija.getConnection();
 

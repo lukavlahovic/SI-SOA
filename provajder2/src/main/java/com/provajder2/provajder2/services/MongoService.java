@@ -5,5 +5,5 @@ import java.util.Map;
 
 public interface MongoService {
 
-    public String test();
+    public String test(String query);
 }
