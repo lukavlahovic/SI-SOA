@@ -9,10 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Service
 public class AddServiceImpl implements AddService {
@@ -96,7 +95,22 @@ public class AddServiceImpl implements AddService {
             Map map = (Map) result;
             for(Object key: map.keySet())
             {
-                ((ArrayList<String>)mapa.get(key)).add((String) map.get(key));
+                if(map.get(key)!=null)
+                {
+                    if(map.get(key) instanceof Date)
+                    {
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+                        ((ArrayList<String>)mapa.get(key)).add(dateFormat.format(map.get(key)));
+                    }
+                    else
+                    {
+                        ((ArrayList<String>)mapa.get(key)).add( map.get(key).toString());
+                    }
+                }
+                else
+                    ((ArrayList<String>)mapa.get(key)).add("");
+
+
             }
         }
         System.out.println(mapa);
