@@ -60,7 +60,7 @@ public class ControllerRequest {
         return new ResponseEntity<String>(mongoService.test(query), HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "/arango/arango")
+    @RequestMapping(method = RequestMethod.POST, value = "/service/arango")
     public ResponseEntity<String> arangoDB(@RequestHeader("query") String query){
         return new ResponseEntity<String>(arangoService.test(query), HttpStatus.OK);}
 
