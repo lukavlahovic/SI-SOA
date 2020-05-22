@@ -193,6 +193,7 @@ public class TransformatorServiceImpl implements TransformatorService {
                                     setData.append(atribut,value);
                             }
                         }
+                        System.out.println("SET DATA JE " + setData.toJson());
                         updateQuery.append("$set", setData);
                         Document searchQuery = new Document();
                         for(int i=5;i<reci.length;i++) {
@@ -203,12 +204,14 @@ public class TransformatorServiceImpl implements TransformatorService {
                             if(reci.length>i+1 && reci[i+1].equals("AND"))
                                 i++;
                         }
+                        System.out.println("SEARCH JE " + searchQuery.toJson());
                         collection.updateOne(searchQuery, updateQuery);
                         return true;
                     }
             }
         }
         if(tip.equals("arango")){
+
             ArangoDB arango = ArangoConfiguracija.getConnection();
             ArangoDatabase db = arango.db("tim_402_1_arango_si2019");
             for(String s2:s1) {
@@ -216,63 +219,84 @@ public class TransformatorServiceImpl implements TransformatorService {
                 s2 = s2.replace("}", "");
                 String[] tabelaPolja = s2.split(":");
                 String tabela = tabelaPolja[0];
-                String polja = tabelaPolja[1];
-                ArangoCollection collection = db.collection(tabela);
-                if(collection.exists())
-                {
-                    if (sqlCommand.startsWith("INSERT INTO") && reci[2].equalsIgnoreCase(tabela)) {
+                String polja = "";
+                ArangoCollection collection1 = db.collection(tabela);
+                if (sqlCommand.startsWith("INSERT INTO")) {
+                    ArangoCollection collection = db.collection(reci[2]);
+                    if(collection.exists()) {
                         BaseDocument document = new BaseDocument();
                         //append
-                        String[] atributs = reci[3].replace("(","").replace(")","").split(",");
-                        String[] values = reci[5].replace("(","").replace(")","").split(",");
-                        for(int i=0;i<atributs.length;i++){
-                            if(polja.indexOf(atributs[i])>-1)
-                                document.addAttribute(atributs[i],values[i]);
+                        String[] atributs = reci[3].replace("(", "").replace(")", "").split(",");
+                        String[] values = reci[5].replace("(", "").replace(")", "").split(",");
+                        for (int i = 0; i < atributs.length; i++) {
+                            if (polja.indexOf(atributs[i]) > -1)
+                                document.addAttribute(atributs[i], values[i]);
                         }
-                        collection.insertDocument(document,new DocumentCreateOptions());
+                        collection.insertDocument(document, new DocumentCreateOptions());
                         return true;
                     }
-                    else if(sqlCommand.startsWith("DELETE FROM") && reci[2].equalsIgnoreCase(tabela)){
-                        String atribut = reci[4].split("=")[0];
-                        String value = reci[4].split("=")[1];
-                        if(polja.indexOf(atribut)>-1){
-                            ArangoCursor<BaseDocument> cursor = db.query("FOR doc IN " +tabela+
-                                            "  FILTER doc."+atribut+ " == "+"\""+value+"\" " +
-                                            "RETURN doc",BaseDocument.class);
-                            BaseDocument document = cursor.first();
-                            if(document!=null)
-                                collection.deleteDocument(document.getKey());
+                }
+                else if(sqlCommand.startsWith("DELETE FROM")){
+                    ArangoCollection collection = db.collection(reci[2]);
+                    if(collection.exists()) {
+                        String filter = "";
+                        for(int i=5;i<reci.length;i++) {
+                            if(polja.indexOf(reci[i].split("=")[0])>-1)
+                                filter += "doc." + reci[i].split("=")[0] + " == " + "\"" + reci[i].split("=")[1] + "\" ";
+                            if(reci.length>i+1 && reci[i+1].equals("AND")) {
+                                filter += " and ";
+                                i++;
+                            }
                         }
-                        return true;
-                    }
-                    else if(sqlCommand.startsWith("UPDATE") && reci[1].equalsIgnoreCase(tabela)){
-                        String searchAtribut = reci[5].split("=")[0];
-                        String searchValue = reci[5].split("=")[1];
-                        ArangoCursor<BaseDocument> cursor = db.query("FOR doc IN " +tabela+
-                                "  FILTER doc."+searchAtribut+ " == "+"\""+searchValue+"\" " +
-                                "RETURN doc",BaseDocument.class);
+                        ArangoCursor<BaseDocument> cursor = db.query("FOR doc IN " + tabela +
+                                "  FILTER " + filter +
+                                "RETURN doc", BaseDocument.class);
                         BaseDocument document = cursor.first();
-                        if(document!=null)
-                        {
-                            if(reci[3].indexOf(",")>-1){
-                                for(String atributAndValue : reci[3].split(",")){
+                        if (document != null)
+                            collection.deleteDocument(document.getKey());
+
+                        return true;
+                    }
+                }
+                else if(sqlCommand.startsWith("UPDATE")){
+                    ArangoCollection collection = db.collection(reci[1]);
+                    ArangoCursor<BaseDocument> cursor = db.query(
+                            "for a in "+ reci[1] +
+                                    "    limit 1" +
+                                    "    return a", BaseDocument.class
+                    );
+                    for(String polje : cursor.next().getProperties().keySet()){
+                        polja += polje;
+                    }
+                    System.out.println("POLJA " + polja);
+                    if(collection.exists()) {
+                        String filter = "";
+                        for(int i=5;i<reci.length;i++) {
+                            if(polja.indexOf(reci[i].split("=")[0])>-1)
+                                filter += "doc." + reci[i].split("=")[0] + " == " + "\"" + reci[i].split("=")[1] + "\" ";
+                            if(reci.length>i+1 && reci[i+1].equals("AND")) {
+                                filter += " and ";
+                                i++;
+                            }
+                        }
+                        ArangoCursor<BaseDocument> cursor1 = db.query("FOR doc IN " + tabela +
+                                "  FILTER " + filter +
+                                "RETURN doc", BaseDocument.class);
+                        BaseDocument document = cursor1.first();
+                        if (document != null) {
+                            if (reci[3].indexOf(",") > -1) {
+                                for (String atributAndValue : reci[3].split(",")) {
                                     String atribut = atributAndValue.split("=")[0];
                                     String value = atributAndValue.split("=")[1];
-                                    document.addAttribute(atribut,value);
+                                    document.addAttribute(atribut, value);
                                 }
 
                             }
-
-
-                            collection.updateDocument(document.getKey(),document);
+                            collection.updateDocument(document.getKey(), document);
                             return true;
                         }
-
-
                     }
                 }
-
-
             }
         }
         return false;
