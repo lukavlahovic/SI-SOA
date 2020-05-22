@@ -59,7 +59,7 @@ public class Mysql implements Repository {
 	}
 
 	@Override
-	public void update(Entitet entitet, String[] redKojiSeDodaje, String staraVrednost) throws SQLException {
+	public void update(Entitet entitet, String[] redKojiSeDodaje, String[] staraVrednost) throws SQLException {
 		String tableName = entitet.getName();
 		String statement = "UPDATE `"+tableName;
 		

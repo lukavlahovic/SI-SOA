@@ -37,7 +37,7 @@ public class API extends AbstractAPI {
 	}
 
 	@Override
-	public void update(Entitet entitet,String[] redKojiSeDodaje, String staraVrednost) {
+	public void update(Entitet entitet,String[] redKojiSeDodaje, String[] staraVrednost) {
 		try {
 			repository.update(entitet, redKojiSeDodaje,staraVrednost);
 		} catch (SQLException e) {

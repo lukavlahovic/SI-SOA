@@ -56,7 +56,10 @@ public class UpdateViewRelacija extends JDialog{
 			add(new Label(attribute.getName()));
 			add(nizPolja[i++]);
 		}
-		String staraVrednost = nizPolja[nizPolja.length-1].getText();
+		String[] staraVrednost = new String[nizPolja.length];
+		for(int j=0;j<nizPolja.length;j++) {
+			staraVrednost[j] = nizPolja[j].getText();
+		}
 		setLayout(new FlowLayout());
 		setSize(240, 100 * atributi.size());
 		

@@ -6,11 +6,10 @@ import com.arangodb.ArangoDB;
 import com.arangodb.ArangoDatabase;
 import com.arangodb.entity.BaseDocument;
 import com.arangodb.model.DocumentCreateOptions;
-import com.fasterxml.jackson.databind.ser.Serializers;
 import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
-import com.mongodb.client.model.Filters;
 import com.provajder2.provajder2.arangoConfig.ArangoConfiguracija;
 import com.provajder2.provajder2.bootstrap.Bootstrap;
 import com.provajder2.provajder2.mongoConfig.MongoConfiguracija;
@@ -22,6 +21,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 
 @Service
 public class TransformatorServiceImpl implements TransformatorService {
@@ -112,19 +112,26 @@ public class TransformatorServiceImpl implements TransformatorService {
         String tip = s[0];
         String[] s1 = s[1].split("!");
         String[] reci = sqlCommand.split(" ");
+        System.out.println("TIP JE " + tip);
         if(tip.equals("mongo")) {
+            System.out.println("UASO U MONGO");
             MongoDatabase db = MongoConfiguracija.getConnection().getDatabase("tim_402_1_mongo_si2019");
             for (String s2 : s1) {
                 s2 = s2.replace("{", "");
                 s2 = s2.replace("}", "");
                 String[] tabelaPolja = s2.split(":");
                 String tabela = tabelaPolja[0];
-                String polja = tabelaPolja[1];
-                if (db.listCollectionNames()
-                        .into(new ArrayList<String>()).contains(tabela)) {
-                    if (sqlCommand.startsWith("INSERT INTO") && reci[2].equalsIgnoreCase(tabela)) {
-                        BasicDBObject document = new BasicDBObject();
-                        MongoCollection<BasicDBObject> collection = db.getCollection(tabela, BasicDBObject.class);
+                String polja = "";
+                    if (sqlCommand.startsWith("INSERT INTO") && db.listCollectionNames()
+                            .into(new ArrayList<String>()).contains(reci[2])) {
+                        Document document = new Document();
+                        MongoCollection<Document> collection = db.getCollection(reci[2], Document.class);
+                        MongoCursor<Document> cursor = collection.find().iterator();
+                        Document tmp = cursor.next();
+                        for(String key : tmp.keySet()){
+                            polja += key + " ";
+                        }
+                        System.out.println("POLJA " + polja);
                         //append
                         String[] atributs = reci[3].replace("(","").replace(")","").split(",");
                         String[] values = reci[5].replace("(","").replace(")","").split(",");
@@ -135,35 +142,70 @@ public class TransformatorServiceImpl implements TransformatorService {
                         collection.insertOne(document);
                         return true;
                     }
-                    else if(sqlCommand.startsWith("DELETE FROM") && reci[2].equalsIgnoreCase(tabela)){
-                        MongoCollection<BasicDBObject> collection = db.getCollection(tabela, BasicDBObject.class);
-                        String atribut = reci[4].split("=")[0];
-                        String value = reci[4].split("=")[1];
-                        if(polja.indexOf(atribut)>-1)
-                            collection.deleteOne(Filters.eq(atribut, value));
+                    else if(sqlCommand.startsWith("DELETE FROM") && db.listCollectionNames()
+                            .into(new ArrayList<String>()).contains(reci[2])){
+                        MongoCollection<Document> collection = db.getCollection(reci[2], Document.class);
+                        MongoCursor<Document> cursor = collection.find().iterator();
+                        Document tmp = cursor.next();
+                        for(String key : tmp.keySet()){
+                            polja += key;
+                        }
+                        System.out.println("POLJA " + polja);
+                        /*int nbAttr = StringUtils.countMatches(sqlCommand, "AND") + 1;
+                        String[] atributs = new String[nbAttr];
+                        String[] values = new String[nbAttr];*/
+                        int j=0;
+                        List<Document> lista = new ArrayList<>();
+                        for(int i=4;i<reci.length;i++){
+                            if(polja.indexOf(reci[i].split("=")[0])>-1) {
+                                Document d = new Document(reci[i].split("=")[0], reci[i].split("=")[1]);
+                                lista.add(d);
+                            }
+                            if(reci.length>i+1 && reci[i+1].equals("AND"))
+                                i++;
+                        }
+                        /*if(polja.indexOf(atribut)>-1)
+                            //collection.deleteOne(Filters.eq(atribut, value));
+                            collection.deleteOne(and(eq(atribut, value)));*/
+
+                        Document query =
+                                new Document("$and", lista);
+                        collection.deleteOne(query);
                         return true;
                     }
-                    else if(sqlCommand.startsWith("UPDATE") && reci[1].equalsIgnoreCase(tabela)){
-                        MongoCollection<Document> collection = db.getCollection(tabela);
+                    else if(sqlCommand.startsWith("UPDATE") && db.listCollectionNames()
+                            .into(new ArrayList<String>()).contains(reci[1])){
+                        System.out.println("UASO U UPDATE");
+                        MongoCollection<Document> collection = db.getCollection(reci[1], Document.class);
+                        MongoCursor<Document> cursor = collection.find().iterator();
+                        Document tmp = cursor.next();
+                        for(String key : tmp.keySet()){
+                            polja += key;
+                        }
+                        System.out.println("POLJA " + polja);
                         Document updateQuery = new Document();
                         Document setData = new Document();
                         if(reci[3].indexOf(",")>-1){
                             for(String atributAndValue : reci[3].split(",")){
                                 String atribut = atributAndValue.split("=")[0];
                                 String value = atributAndValue.split("=")[1];
-                                setData.append(atribut,value);
+                                if(polja.indexOf(atribut)>-1)
+                                    setData.append(atribut,value);
                             }
-
                         }
                         updateQuery.append("$set", setData);
                         Document searchQuery = new Document();
-                        String searchAtribut = reci[5].split("=")[0];
-                        String searchValue = reci[5].split("=")[1];
-                        searchQuery.append(searchAtribut, searchValue);
+                        for(int i=5;i<reci.length;i++) {
+                            String searchAtribut = reci[i].split("=")[0];
+                            String searchValue = reci[i].split("=")[1];
+                            if(polja.indexOf(searchAtribut)>-1)
+                                searchQuery.append(searchAtribut, searchValue);
+                            if(reci.length>i+1 && reci[i+1].equals("AND"))
+                                i++;
+                        }
                         collection.updateOne(searchQuery, updateQuery);
                         return true;
                     }
-                }
             }
         }
         if(tip.equals("arango")){

@@ -56,11 +56,14 @@ public class Broker implements Repository {
         HttpPost httpPost = new HttpPost("http://localhost:8080/provajder2/deleteTransform/");
         String json = "{ \"entitet\":\"" + entitet.getName() + "\",\"atributi\":{";
 
-        json += "\"" + entitet.getAtribut().get(0) + "\":" + "\"" + redKojiSeDodaje[0] + "\"";
-
+        for(int i=0;i<entitet.getAtribut().size();i++){
+            json += "\"" + entitet.getAtribut().get(i) + "\":" + "\"" + redKojiSeDodaje[i] + "\"";
+            if (i<entitet.getAtribut().size()-1) json+=",";
+        }
 
         json += "}}";
         System.out.println(json);
+
         StringEntity entity = new StringEntity(json);
         httpPost.setEntity(entity);
         httpPost.setHeader("Accept", "application/json");
@@ -84,7 +87,7 @@ public class Broker implements Repository {
     }
 
     @Override
-    public void update(Entitet entitet, String[] redKojiSeDodaje, String staraVrednost) throws SQLException {
+    public void update(Entitet entitet, String[] redKojiSeDodaje, String[] staraVrednost) throws SQLException {
 
         CloseableHttpClient client = HttpClients.createDefault();
         //HttpPost httpPost = new HttpPost("http://localhost:8080/provajder1/teski/update");//u provajderu http://localhost:8081/api/teski/add
@@ -96,7 +99,11 @@ public class Broker implements Repository {
         }
         //
         json += "},";
-        json += "\"" + "staravrednost" + "\":" +"{"+ "\"" + entitet.getAtribut().get(entitet.getAtribut().size()-1) +  "\":" + "\"" + staraVrednost + "\"";
+        json += "\"" + "staravrednost" + "\":" +"{";
+        for(int i=0;i<staraVrednost.length;i++){
+            json += "\"" + entitet.getAtribut().get(i) +  "\":" + "\"" + staraVrednost[i] + "\"";
+            if (i<entitet.getAtribut().size()-1) json+=",";
+        }
         json += "}}";
         System.out.println(json);
         StringEntity entity = new StringEntity(json);

@@ -66,14 +66,20 @@ public class AddServiceImpl implements AddService {
     public String deleteTK(AddDTO addDTO) {
 
         String command = "DELETE FROM `" + addDTO.getEntitet() + "` WHERE "; //ULO_OZNAKA`,`ULO_NAZIV`) VALUES ('" + ulo_oznaka + "','" + ulo_naziv + "');";
-
+        int i=0;
         for(Map.Entry<String,String> entry : addDTO.getAtributi().entrySet())
         {
             command += "`"+entry.getKey() + "`";
             command += "=";
-            command += "'"+entry.getValue()+"';";
+            command += "'"+entry.getValue()+"'";
+            if(i < addDTO.getAtributi().size() - 1)
+            {
+                command += " AND ";
+            }
+            i++;
 
         }
+        command+=";";
         bootstrap.getTemplate().execute(command);
         return command;
     }
@@ -134,13 +140,19 @@ public class AddServiceImpl implements AddService {
 
         command += " WHERE ";
         System.out.println(addDTO.toString());
+        i=0;
         for(Map.Entry<String,String> entry : addDTO.getStaravrednost().entrySet())
         {
             command += "`"+entry.getKey() + "`";
             command += "=";
-            command += "'"+entry.getValue()+"';";
+            command += "'"+entry.getValue()+"'";
+            if(i < addDTO.getAtributi().size() - 1)
+            {
+                command += " AND ";
+            }
+            i++;
         }
-
+        command += ";";
         //System.out.println("Entitet " + addDTO.getEntitet() + " atributi " + addDTO.getAtributi().toString());
         bootstrap.getTemplate().execute(command);
         return command;
