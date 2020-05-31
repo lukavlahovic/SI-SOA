@@ -2,7 +2,6 @@ package com.provajder2.provajder2.services.impl;
 
 import com.arangodb.ArangoCollection;
 import com.arangodb.ArangoCursor;
-import com.arangodb.ArangoDB;
 import com.arangodb.ArangoDatabase;
 import com.arangodb.entity.BaseDocument;
 import com.arangodb.model.DocumentCreateOptions;
@@ -10,15 +9,17 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Indexes;
 import com.provajder2.provajder2.arangoConfig.ArangoConfiguracija;
 import com.provajder2.provajder2.bootstrap.Bootstrap;
 import com.provajder2.provajder2.mongoConfig.MongoConfiguracija;
 import com.provajder2.provajder2.services.TransformatorService;
-import com.sun.deploy.security.SelectableSecurityManager;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,9 @@ public class TransformatorServiceImpl implements TransformatorService {
     private Bootstrap bootstrap;
     private static MongoDatabase dbMongo;
     private static ArangoDatabase dbArango;
+    private String[] queries = {"SELECT * FROM POPULATED_PLACES WHERE DR_IDENTIFIKATOR='srb'",
+            "SELECT H.VU_NAZIV,H.VU_ADRESA,H.VU_WEB_ADRESA,OT.VV_NAZIV FROM HIGH_EDUCATION_INSTITUTION H JOIN OWNERSHIP_TYPE OT on H.VV_OZNAKA = OT.VV_OZNAKA",
+            "SELECT * FROM HIGH_EDUCATION_INSTITUTION WHERE TIP_UST='UN'"};
 
     @Autowired
     public TransformatorServiceImpl(Bootstrap bootstrap) {
@@ -37,9 +41,12 @@ public class TransformatorServiceImpl implements TransformatorService {
     }
 
     @Override
-    public Boolean transform(String baza, String sqlCommand) { //mongo;{role:ULO_OZNAKA,ULO_NAZIV};
+    public Boolean transform(String baza, String sqlCommand,String sablon) { //mongo;{role:ULO_OZNAKA,ULO_NAZIV};
         if (sqlCommand != null) {
             return transform2(baza, sqlCommand);
+        }
+        if(sablon!=null){
+            return transform3(baza,sablon);
         }
         String[] s = baza.split(";");
         String tip = s[0];
@@ -95,6 +102,53 @@ public class TransformatorServiceImpl implements TransformatorService {
                         collection.insertDocument(document, new DocumentCreateOptions());
                     }
                 }
+            }
+            return true;
+        }
+        return false;
+    }
+
+    public Boolean transform3(String baza, String sablon){
+        String tip = baza;
+        //SELECT DR_IDENTIFIKATOR,NM_IDENTIFIKATOR,NM_NAZIV,NM_PTT_CODE FROM POPULATED_PLACES
+        if (tip.equals("mongo")) {
+            dbMongo = MongoConfiguracija.getConnection().getDatabase("tim_402_1_mongo_si2019");
+            String query = queries[Integer.parseInt(sablon)-1];
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+            LocalDateTime now = LocalDateTime.now();
+            String datum = dtf.format(now);
+            String tabela = "";
+            for(int i=query.indexOf("FROM")+5;i<query.length()&&query.charAt(i)!=' ';i++){
+                tabela += query.charAt(i);
+            }
+            tabela += " " + datum;
+            System.out.println("TRANSFORMACIJA " + tabela);
+            MongoCollection<BasicDBObject> collection = dbMongo.getCollection(tabela, BasicDBObject.class);
+            String command = query;
+            List results = bootstrap.getTemplate().queryForList(command);
+            for (Object result : results) {
+                Map map = (Map) result;
+                BasicDBObject document = new BasicDBObject();
+                map.forEach((key, value) -> {
+                    document.append((String) key, value);
+                });
+                collection.insertOne(document);
+            }
+            if(sablon.equals("1")){
+                // {POPULATED_PLACES:DR_IDENTIFIKATOR,NM_IDENTIFIKATOR,NM_NAZIV,NM_PTT_CODE}
+                collection.createIndex(Indexes.ascending("NM_NAZIV","NM_IDENTIFIKATOR"));
+                collection.createIndex(Indexes.ascending("NM_IDENTIFIKATOR"));
+            }
+            else if(sablon.equals("2")){
+                // {ROLE:ULO_OZNAKA,ULO_NAZIV}
+                collection.createIndex(Indexes.ascending("VU_NAZIV","VV_NAZIV"));
+                collection.createIndex(Indexes.ascending("VU_WEB_ADRESA","VV_NAZIV"));
+            }
+            else if(sablon.equals("3")){
+                // {LANGUAGES:JEZ_JEZIK,JEZ_NAZIV}
+                collection.createIndex(Indexes.ascending("VU_NAZIV","NM_IDENTIFIKATOR"));
+                collection.createIndex(Indexes.ascending("VV_OZNAKA","NM_IDENTIFIKATOR"));
+                collection.createIndex(Indexes.ascending("DR_IDENTIFIKATOR","VU_IDENTIFIKATOR"));
             }
             return true;
         }

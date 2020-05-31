@@ -26,6 +26,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -167,18 +168,39 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
                 CloseableHttpClient client = HttpClients.createDefault();
                 if (endpoint.getZahtev().equals("POST")) {
                     String query = null;
+                    boolean hasRezim = false;
+                    if(map!=null) {
+                        for (Map.Entry<String, Object> entry : map.entrySet()) {
+                            if (entry.getKey().equals("rezim")) {
+                                hasRezim = true;
+                            }
+                        }
+                    }
                     if(endpoint.getBaza()!=null){
-                        System.out.println("USAO ZA TRANSFORMATORA");
-                        String[] s = endpoint.getBaza().split(";");
-                        String baza = s[0] + ";" + s[1];
-                        String urlTransformator = s[2];
-                        query = s[3];
-                        HttpPost httpPost = new HttpPost(urlTransformator);
-                        httpPost.setHeader("baza",baza);
-                        try {
-                            CloseableHttpResponse response = client.execute(httpPost);
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        if(!hasRezim||((String)map.get("rezim")).equals("1")) {
+                            System.out.println("USAO ZA TRANSFORMATORA");
+                            String[] s = endpoint.getBaza().split(";");
+                            String baza;
+                            String urlTransformator;
+                            if (map.containsKey("sablon")) {
+                                baza = s[0];
+                                urlTransformator = s[1];
+                            } else {
+                                baza = s[0] + s[1];
+                                urlTransformator = s[3];
+                            }
+                            HttpPost httpPost = new HttpPost(urlTransformator);
+                            httpPost.setHeader("baza", baza);
+                            if (map.containsKey("sablon")) {
+                                httpPost.setHeader("sablon", (String) map.get("sablon"));
+                            } else {
+                                query = s[3];
+                            }
+                            try {
+                                CloseableHttpResponse response = client.execute(httpPost);
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
                         }
                     }
                     HttpPost httpPost = new HttpPost(url);
@@ -196,6 +218,17 @@ public class PovezivanjeNaProvajderaImpl implements PovezivanjeNaProvajdera {
                         httpPost.setHeader("Content-type", "application/json");
                         if(query!=null) {
                             httpPost.setHeader("query", query);
+                        }
+                        if(hasRezim){
+                            httpPost.setHeader("rezim",(String)map.get("rezim"));
+                            if(((String)map.get("rezim")).equals("2")){
+                                query = "";
+                                query += (String)map.get("izvestaj") + ";";
+                                query += (String)map.get("kolone") + ";";
+                                query += (String)map.get("filter") + ";";
+                                query += (String)map.get("sort");
+                                httpPost.setHeader("query",query);
+                            }
                         }
                         CloseableHttpResponse response = client.execute(httpPost);
                         String result = EntityUtils.toString(response.getEntity());

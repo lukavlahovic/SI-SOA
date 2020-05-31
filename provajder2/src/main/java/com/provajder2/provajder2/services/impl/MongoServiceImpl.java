@@ -19,7 +19,7 @@ public class MongoServiceImpl implements MongoService {
     @Override
     public String test(String query) {
         System.out.println("RADI MONGO");
-        //SELECT DR_IDENTIFIKATOR,NM_NAZIV FROM POPULATED_PLACES WHERE NM_PTT_CODE>20000            NM_IDENTIFIKATOR>2
+        //SELECT DR_IDENTIFIKATOR,NM_NAZIV FROM POPULATED_PLACES WHERE DR_IDENTIFIKATOR="srb" AND NM_PTT_CODE>20000            NM_IDENTIFIKATOR>2
         String[] reci = query.split(" ");
         String kolekcija = reci[3];
         String kolone = reci[1];
